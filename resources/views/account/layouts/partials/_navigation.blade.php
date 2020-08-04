@@ -1,8 +1,8 @@
 <ul class="nav nav-pills">
+
     <li class="nav-item ">
 
         <a class="nav-link {{return_if(on_page('account'), 'active')}}" href="{{route('account.index')}}">Account overview</a>
-
 
     </li>
     <li class="nav-item">
@@ -26,5 +26,12 @@
         <a class="nav-link {{return_if(on_page('account/tokens'), 'active')}}" href="{{route('token.index')}}">API Tokens</a>
 
     </li>
+    @admin
+    <li class="nav-item">
+
+        <a class="nav-link {{return_if(on_page('admin/impersonate'), 'active')}}" href="{{route('admin.impersonate.index')}}">Impersonate User</a>
+
+    </li>
+    @endadmin
 
 </ul>
