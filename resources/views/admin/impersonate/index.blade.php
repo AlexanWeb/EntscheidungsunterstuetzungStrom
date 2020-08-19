@@ -1,9 +1,6 @@
-@extends('layouts.app')
+@extends('account.layouts.default')
 
-@section('content')
-<div class="row">
-    <div class="clo-md-8 col-md-offset-2">
-        <div class="card">
+@section('account.content')
             <div class="card">
                 <div class="card-header">
                     Impersonate a User
@@ -26,9 +23,4 @@
                     </form>
                 </div>
             </div>
-
-        </div>
-    </div>
-</div>
-
 @endsection

@@ -28,7 +28,7 @@
                 @yield('content')
             </main>
         </div>
-
+        @include('layouts.footer')
     </div>
     <script src="{{asset('js/bootstrap.js')}}"></script>
     @yield('scripts')

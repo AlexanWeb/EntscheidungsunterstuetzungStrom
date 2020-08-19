@@ -1,4 +1,4 @@
-<ul class="nav nav-pills">
+<ul class="nav flex-column nav-pills">
 
     <li class="nav-item ">
 

@@ -7,7 +7,7 @@
             @include('account.layouts.partials._navigation')
         </div>
         <div class="col-md-9">
-            Content
+
             @yield('account.content')
         </div>
     </div>

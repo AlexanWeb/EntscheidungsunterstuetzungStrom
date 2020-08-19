@@ -2,5 +2,5 @@
 
 @section('account.content')
 
-OVerewie
+
 @endsection
