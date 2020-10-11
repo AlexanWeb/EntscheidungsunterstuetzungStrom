@@ -11,6 +11,8 @@
 |
 */
 
+use App\Http\Controllers\Controller;
+
 Route::get('/token', function(){
     $token = auth()->user()->generateConfirmationToken();
     dd($token);
@@ -63,3 +65,13 @@ Route::group(['prefix' => 'subscription', 'as' => 'subscription.', 'middleware' 
     Route::get('/', 'Subscription\SubscriptionController@index')->name('index');
     Route::post('/', 'Subscription\SubscriptionController@store')->name('store');
 });
+
+
+Route::get('/import', 'Data\ImportController@index')->name('import');
+Route::post('/import', 'Data\ImportController@store')->name('upload');
+
+
+
+Route::get('chart/input','Data\GraphDataController@index')->name('input');
+Route::get('chart/input/test','Data\GraphDataController@store')->name('getDetails');
+

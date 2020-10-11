@@ -10,7 +10,6 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -31,7 +30,10 @@
         @include('layouts.footer')
     </div>
     <script src="{{asset('js/bootstrap.js')}}"></script>
+    <script src="{{ asset('js/app.js') }}" defer></script>
     @yield('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>
+
+
 </body>
 </html>

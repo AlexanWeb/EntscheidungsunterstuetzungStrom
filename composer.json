@@ -9,7 +9,8 @@
     "license": "MIT",
     "require": {
         "php": "^7.2",
-        "consoletvs/charts": "6.*",
+        "ext-json": "*",
+        "consoletvs/charts": "7.*",
         "fideloper/proxy": "^4.0",
         "laravel/cashier": "^10.5",
         "laravel/framework": "^6.2",
