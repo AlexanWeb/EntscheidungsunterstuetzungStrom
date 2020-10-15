@@ -36,46 +36,31 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.js" charset="utf-8"></script>
 
 <script>
-
     Chart.pluginService.register({
         // This works to coor th backgournd
         beforeDraw: function (chart, easing) {
-
             if (chart.config.options.chartArea && chart.config.options.chartArea.backgroundColor) {
-
                 var ctx = chart.chart.ctx;
                 var chartArea = chart.chartArea;
-
-
                 var meta = chart.getDatasetMeta(0);
-
                 var start = meta.data[25]._model.x;
                 var stop  = meta.data[keys.length-1]._model.x;
-
                 console.log (start,stop);
-
-
                 ctx.save();
                 ctx.fillStyle = chart.config.options.chartArea.backgroundColor;
                 console.log (chartArea);
                 ctx.fillRect(start, chartArea.top, stop - start, chartArea.bottom - chartArea.top);
                 ctx.restore();
-
             }
         }
     });
-
     var ctx = document.getElementById("myLine").getContext('2d');
     var keys = {!! json_encode($keys) !!};
     var price = {!! json_encode($values) !!};
-
     var test = Array(keys.length).fill(0.02);
-
     input = {
-
         type: 'line',
         data: {
-
             labels: keys ,
             datasets: [{
                 data: price,
@@ -92,7 +77,6 @@
             }
             ]
         },
-
         options: {
             responsive:true,
             animation : false,
@@ -100,7 +84,6 @@
             chartArea: {
                 backgroundColor: 'rgba(251, 85, 85, 0.4)'
             },
-
             scales: {
                 yAxes: [{
                     ticks: {
@@ -112,9 +95,7 @@
     }
 
     var myLine = new Chart(ctx, input);
-
     var x = document.getElementById("myCheck");
-
     x.addEventListener('change', function () {
         console.log(x.value);
         console.log(myLine.data.datasets[1].hidden);
@@ -124,12 +105,8 @@
             myLine.data.datasets[1].hidden = true
         }
         console.log(myLine.data.datasets[1].hidden);
-
         myLine.update();
     });
-
-      console.log(keys);
-      console.log(price);
 </script>
 </body>
 </html>

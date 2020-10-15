@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Data;
 
 use App\Models\Data\Price\Prices_Day_Ahead;
+use App\Models\Data\Price\Prices_Interady;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -33,18 +34,22 @@ class ImportController extends Controller
         ]);
 
         $file = $request->file('file')->getRealPath();
-        //$data = array_map('str_getcsv', file($path));
-        //$data = $file;
 
-        //$fileName = resource_path('day-ahead-auction-files/'.date('y-m-d-H-i-s').$data.'.csv');
 
-        //file_put_contents($fileName, $data);
+        $data = array_map('str_getcsv', file($file));
+        $data = array_slice($data, 2);
 
-        (new Prices_Day_Ahead())->uploadToTD($file);
+        if($request->type_sale == "day_Ahead")
+        {
+            (new Prices_Day_Ahead())->uploadToTD($data);
 
+        } elseif ($request->type_sale == "intraday")
+        {
+            (new Prices_Interady())->uploadToTD($data);
+        }
         session()->flash('status', 'queued for importing');
 
-        return redirect('import');
+          return redirect('import');
     }
 
 

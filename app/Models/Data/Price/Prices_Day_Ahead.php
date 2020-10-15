@@ -21,14 +21,41 @@ class Prices_Day_Ahead extends Model
 
     protected  $guarded = [];
 
-    public function uploadToTD($file){
+
+
+
+
+    public function uploadToTD($data){
         //$path = resource_path('day-ahead-auction-files/*.csv');
 
         //$files = glob($path);
 
-        $data = array_map('str_getcsv', file($file));
-        $data = array_slice($data, 2);
+        // $data = array_map('str_getcsv', file($file));
+        // $data = array_slice($data, 2);
 
+        Foreach($data as $mapKey => $arr)
+        {
+            Foreach($arr as $key => $value)
+            {
+                If ($value == "")
+                {
+                    if ($key == 3 and $data[$mapKey][4] != ""){
+                        $data[$mapKey][$key] = $data[$mapKey][4];
+                    }elseif ($key == 4 and $data[$mapKey][3] != ""){
+                        $data[$mapKey][$key] = $data[$mapKey][3];
+                    }else
+                    {
+                        if ($data[$mapKey][$key-1]== "" or $data[$mapKey][$key+1]== "")
+                        {
+                            $data[$mapKey][$key] = ($data[$mapKey][26]+ $data[$mapKey][27]) / 2;
+                        }else
+                        {
+                            $data[$mapKey][$key] = ($data[$mapKey][$key-1] + $data[$mapKey][$key+1]) / 2;
+                        }
+                    }
+                }
+            }
+        }
         foreach ($data as $row) {
             self::updateOrCreate([
                 'Day'=>date("Y-m-d", strtotime(str_replace('/', '-', $row[0]))),
@@ -79,6 +106,7 @@ class Prices_Day_Ahead extends Model
 
             ]);
         }
-
     }
+
+
 }

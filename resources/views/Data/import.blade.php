@@ -4,32 +4,56 @@
     <div class="card" >
 
         <h5 class="card-header">Import Data</h5>
+
         <div class="card-body">
             <form class="form-horizontal" method="POST" action="{{ route('upload') }}" enctype="multipart/form-data">
             {{ csrf_field() }}
 
-            <div class="form-group{{ $errors->has('file') ? ' has-error' : '' }}">
-                <h4 for="file" class="card-title">CSV file to import</h4>
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Type of sale</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input class="form-check-input" type="radio" name="type_sale" id="type_sale1" value="day_Ahead" checked>
+                            <label class="form-check-label" for="type_sale1">
+                                Day-Ahead Auction
+                            </label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input class="form-check-input" type="radio" name="type_sale" id="type_sale2" value="intraday">
+                            <label class="form-check-label" for="type_sale2">
+                                Intraday Auction
+                            </label>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>CSV file to import</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group{{ $errors->has('file') ? ' has-error' : '' }}">
+                                <div class="custom-file">
+                                    <input id="file" type="file" class="custom-file-input" name="file" required>
+                                    <label class="custom-file-label" for="file">Choose file</label>
 
-                <div class="custom-file">
-                    <input id="file" type="file" class="custom-file-input" name="file" required>
-                    <label class="custom-file-label" for="file">Choose file</label>
-
-                    @if ($errors->has('file'))
-                        <span class="help-block">
+                                    @if ($errors->has('file'))
+                                        <span class="help-block">
                             <strong>{{ $errors->first('file') }}</strong>
                         </span>
-                    @endif
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="mt-3">
-                    <button type="submit" class="btn btn-primary" name="submit"><i class="fa fa-check"></i>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="mt-1">
+                            <button type="submit" class="btn btn-primary" name="submit"><i class="fa fa-check"></i>
                         Submit
-                    </button>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
             </form>
         </div>
     </div>
