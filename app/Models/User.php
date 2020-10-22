@@ -48,4 +48,8 @@ class User extends Authenticatable
     public function hasNotActivated(){
         return !$this->hasActivated();
     }
+
+    public function powerplants(){
+        return $this->hasMany('App\Models\PowerPlant', 'user_id', 'id');
+    }
 }

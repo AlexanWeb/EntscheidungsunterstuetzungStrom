@@ -11,6 +11,7 @@
 |
 */
 
+use App\Http\Controllers\account\PowerPlantController;
 use App\Http\Controllers\Controller;
 
 Route::get('/token', function(){
@@ -40,6 +41,28 @@ Route::group(['prefix' => 'account', 'middleware' =>['auth']], function () {
     Route::post('deactivate', 'Account\DeactivateController@store')->name('deactivate.store');
 
     Route::get('tokens', 'Account\TokenController@index')->name('token.index');
+
+
+
+    ############### Begin test Relationship ##################
+
+
+    Route::get('powerplants/{id}', 'Admin\AdminController@powerplants')->name('user.powerplants');
+    Route::get('powerplant', 'Account\PowerPlantController@index')->name('powerplant.index');
+    Route::post('powerplant', 'Account\PowerPlantController@store')->name('powerplant.store');
+
+
+    Route::get('powerplant/show', 'Account\PowerPlantController@show')->name('powerplant.show');
+
+
+
+    Route::get('powerplant/showToEdit{id}', 'Account\PowerPlantController@showToEdit')->name('powerplant.showtoedit');
+    Route::post('powerplant/showToEdit', 'Account\PowerPlantController@edit')->name('powerplant.edit');
+
+
+    Route::get('powerplant/delete{id}', 'Account\PowerPlantController@destroy')->name('powerplant.delete');
+
+    ############### End test Relationship ####################
 });
 
 Route::group(['prefix' => 'admin','namespace' => 'Admin', 'middleware' =>['auth', 'admin'], 'as' => 'admin.'], function (){
@@ -66,12 +89,16 @@ Route::group(['prefix' => 'subscription', 'as' => 'subscription.', 'middleware' 
     Route::post('/', 'Subscription\SubscriptionController@store')->name('store');
 });
 
+######### Begin import Data ############
+Route::group(['prefix' => 'admin'],function () {
 
-Route::get('/import', 'Data\ImportController@index')->name('import');
-Route::post('/import', 'Data\ImportController@store')->name('upload');
+    Route::get('/import', 'Data\ImportController@index')->name('admin.import');
+    Route::post('/import', 'Data\ImportController@store')->name('admin.upload');
+});
+######### End import Data ############
 
 
-
-Route::get('chart/input','Data\GraphDataController@index')->name('input');
+Route::get('chart/input','Data\GraphDataController@index')->name('chart.input');
 Route::get('chart/input/test','Data\GraphDataController@store')->name('getDetails');
 
+Route::get('admin/users', 'Admin\AdminController@users')->name('admin.users');

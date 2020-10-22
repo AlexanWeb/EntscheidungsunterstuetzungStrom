@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Laravel</title>
     <!-- Fonts -->
-    <link href="{{asset('css/app.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{URL::asset('css/app.css')}}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.3/css/bootstrap-select.min.css">
 </head>
 <body>

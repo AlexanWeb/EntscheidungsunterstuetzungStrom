@@ -1,12 +1,12 @@
-@extends('layouts.app')
+@extends('account.layouts.default')
 
-@section('content')
+@section('account.content')
     <div class="card" >
 
         <h5 class="card-header">Import Data</h5>
 
         <div class="card-body">
-            <form class="form-horizontal" method="POST" action="{{ route('upload') }}" enctype="multipart/form-data">
+            <form class="form-horizontal" method="POST" action="{{ route('admin.upload') }}" enctype="multipart/form-data">
             {{ csrf_field() }}
 
                 <div class="card">

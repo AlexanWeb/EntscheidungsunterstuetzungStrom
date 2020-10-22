@@ -10,6 +10,8 @@
         <a class="nav-link {{return_if(on_page('account/profile'), 'active')}}" href="{{route('profile.index')}}">Profile overview</a>
 
     </li>
+
+
     <li class="nav-item">
 
         <a class="nav-link {{return_if(on_page('account/password'), 'active')}}" href="{{route('password.index')}}">Change Password</a>
@@ -34,4 +36,38 @@
     </li>
     @endadmin
 
+</ul>
+
+<hr>
+<ul class="nav flex-column nav-pills">
+
+    <li class="nav-item ">
+
+        <a class="nav-link {{return_if(on_page('account/powerplant/show'), 'active')}}" href="{{route('powerplant.show')}}">Show Power plant</a>
+
+    </li>
+
+    <li class="nav-item ">
+
+        <a class="nav-link {{return_if(on_page('account/powerplant'), 'active')}}" href="{{route('powerplant.index')}}">Add Power Plant</a>
+
+    </li>
+
+    <li class="nav-item ">
+
+        <a class="nav-link {{return_if(on_page('admin/import'), 'active')}}" href="{{ route('admin.import') }}">Import Data</a>
+
+    </li>
+
+    <li class="nav-item ">
+
+        <a class="nav-link {{return_if(on_page('chart/input'), 'active')}}" href="{{ route('chart.input') }}">Chart</a>
+
+    </li>
+
+    <li class="nav-item ">
+
+        <a class="nav-link {{return_if(on_page('admin/users'), 'active')}}" href="{{ route('admin.users') }}">Users</a>
+
+    </li>
 </ul>

@@ -49,7 +49,7 @@ class ImportController extends Controller
         }
         session()->flash('status', 'queued for importing');
 
-          return redirect('import');
+          return redirect('admin.import');
     }
 
 
