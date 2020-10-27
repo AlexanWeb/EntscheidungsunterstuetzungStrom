@@ -49,7 +49,7 @@ class ImportController extends Controller
         }
         session()->flash('status', 'queued for importing');
 
-          return redirect('admin.import');
+          return redirect()->route('admin.import')->with('success', 'your Data has been uploaded');
     }
 
 

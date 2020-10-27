@@ -25,6 +25,7 @@ class GraphDataController extends Controller
 
     public function store(Request $request)
     {
+
         if($request->type_sale == "day_Ahead"){
             return $this->day_ahead_Data($request);
         } elseif ($request->type_sale == "intraday"){
@@ -157,6 +158,7 @@ class GraphDataController extends Controller
 
         $start_date = date("Y-m-d", strtotime($request->start_day));
         $end_date = date("Y-m-d", strtotime($request->end_day));
+        $today = date("Y-m-d", strtotime($request->today));
 
         // $diff=date_diff($request->start_day,$request->today);
         $prices = Prices_Day_Ahead::whereBetween('Day', [$start_date, $end_date])->get();
@@ -195,7 +197,7 @@ class GraphDataController extends Controller
         $keys = array_keys($result);
         $values = array_values($result);
         //return $diff;
-        return view('charts.test', compact("keys", "values"));
+        return view('charts.test', compact("keys", "values",  "start_date", "end_date", "today"));
     }
 
 }
