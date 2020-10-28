@@ -103,18 +103,21 @@
     Chart.pluginService.register({
         // This works to coor th backgournd
         beforeDraw: function (chart, easing) {
-            if (chart.config.options.chartArea && chart.config.options.chartArea.backgroundColor) {
-                var ctx = chart.chart.ctx;
-                var chartArea = chart.chartArea;
-                var meta = chart.getDatasetMeta(0);
-                var start = meta.data[25]._model.x;
-                var stop  = meta.data[keys.length-1]._model.x;
-                console.log (start,stop);
-                ctx.save();
-                ctx.fillStyle = chart.config.options.chartArea.backgroundColor;
-                console.log (chartArea);
-                ctx.fillRect(start, chartArea.top, stop - start, chartArea.bottom - chartArea.top);
-                ctx.restore();
+            // if today is between the start and end day
+            if (today >= start_date && today < end_date) {
+                if (chart.config.options.chartArea && chart.config.options.chartArea.backgroundColor) {
+                    var ctx = chart.chart.ctx;
+                    var chartArea = chart.chartArea;
+                    var meta = chart.getDatasetMeta(0);
+                    var start = meta.data[(getDifferenceDays(start_date, today) * 24)]._model.x;
+                    var stop = meta.data[keys.length - 1]._model.x;
+                    console.log(start, stop);
+                    ctx.save();
+                    ctx.fillStyle = chart.config.options.chartArea.backgroundColor;
+                    console.log(chartArea);
+                    ctx.fillRect(start, chartArea.top, stop - start, chartArea.bottom - chartArea.top);
+                    ctx.restore();
+                }
             }
         }
     });
@@ -126,6 +129,25 @@
     var keys = {!! json_encode($keys) !!};
     var price = {!! json_encode($values) !!};
     var powerplants =  {!! auth()->user()->powerplants->toJson() !!} ;
+    var start_date =  new Date("{!! $start_date !!}") ;
+    var end_date =  new Date("{!! $end_date !!}") ;
+    var today =  new Date("{!! $today !!}")  ;
+
+    console.log("yes" + getDifferenceDays (start_date, today));
+
+
+
+    //////////// BEGINN calculat the diffrent between tow days ////////////
+
+    function getDifferenceDays (d1, d2) {
+        var t2 = d2.getTime();
+        var t1 = d1.getTime();
+
+        return parseInt((t2-t1)/(24*3600*1000));
+    }
+
+    //////////// BEGINN calculat the diffrent between tow days ////////////
+
 
 
 

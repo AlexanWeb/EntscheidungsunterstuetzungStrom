@@ -12,10 +12,10 @@ class Prices_Day_Ahead extends Model
      * @var array
      */
     protected $fillable = [
-        'Day', 'Hour_1', 'Hour_2', 'Hour_3', 'Hour_4', 'Hour_5', 'Hour_6', 'Hour_7', 'Hour_8', 'Hour_9', 'Hour_10',
+        'Day', 'Hour_1', 'Hour_2', 'Hour_3A', 'Hour_3B', 'Hour_4', 'Hour_5', 'Hour_6', 'Hour_7', 'Hour_8', 'Hour_9', 'Hour_10',
         'Hour_11', 'Hour_12', 'Hour_13', 'Hour_14', 'Hour_15','Hour_16', 'Hour_17', 'Hour_18', 'Hour_19','Hour_20',
-        'Hour_21', 'Hour_22', 'Hour_22', 'Hour_24', 'Minimum', 'Maximum', 'Middle_Night', 'Early_Morning',
-        'Late_Morning', 'Early_Afternoon', 'Rush_Hour', 'Off-Peak_2', 'Baseload', 'Peakload', 'Off-Peak_1',
+        'Hour_21', 'Hour_22', 'Hour_23', 'Hour_24', 'Minimum', 'Maximum', 'Middle_Night', 'Early_Morning',
+        'Late_Morning', 'Early_Afternoon', 'Rush_Hour', 'Off-Peak_2', 'Baseload', 'Peakload','Night', 'Off-Peak_1',
         'Business', 'Offpeak', 'Morning', 'High_Noon', 'Afternoon', 'Evening', 'Sunpeak'
     ];
 
