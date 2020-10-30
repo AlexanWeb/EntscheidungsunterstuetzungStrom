@@ -1,7 +1,7 @@
-@extends('layouts.app')
+@extends('account.layouts.default')
 
-@section('content')
-    Home
+@section('account.content')
+
     {!! $chart->container() !!}
     {!! $chart->script() !!}
 

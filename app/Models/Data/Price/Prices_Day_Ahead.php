@@ -26,12 +26,6 @@ class Prices_Day_Ahead extends Model
 
 
     public function uploadToTD($data){
-        //$path = resource_path('day-ahead-auction-files/*.csv');
-
-        //$files = glob($path);
-
-        // $data = array_map('str_getcsv', file($file));
-        // $data = array_slice($data, 2);
 
         Foreach($data as $mapKey => $arr)
         {

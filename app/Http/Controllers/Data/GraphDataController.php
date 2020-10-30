@@ -28,8 +28,8 @@ class GraphDataController extends Controller
     {
         $rules = [
             'type_sale' => 'required',
-            'start_day' => 'required|date_format:dd-mm-yyyy',
-            'end_day' => 'required|date_format:dd-mm-yyyy',
+            'start_day' => 'required',
+            'end_day' => 'required',
         ];
         $validator = Validator::make($request->all(), $rules);
 
