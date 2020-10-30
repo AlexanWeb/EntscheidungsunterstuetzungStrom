@@ -44,7 +44,7 @@
                                         <div class="card-header">
                                             <h6>Type of sale</h6>
                                         </div>
-                                        <div class="card-body">
+                                        <div class="card-body {{$errors->has('type_sale') ? 'has-error':''}}">
                                             <div class="custom-control custom-radio custom-control-inline">
                                                 <input class="form-check-input" type="radio" name="type_sale" id="type_sale1" value="day_Ahead" checked>
                                                 <label class="form-check-label" for="type_sale1">
@@ -57,6 +57,9 @@
                                                     Intraday Auction
                                                 </label>
                                             </div>
+                                            @error('type_sale')
+                                            <small class = "form-text text-danger">{{$errors->first('type_sale')}}</small>
+                                            @enderror
                                         </div>
 
                                     </div>
@@ -72,8 +75,11 @@
                                                             <h7>Start day</h7>
                                                         </div>
                                                         <div class="card-body">
-                                                            <div class="form-group">
+                                                            <div class="form-group {{$errors->has('start_day') ? 'has-error':''}}">
                                                                 <input class="date form-control" type="text" name="start_day" id="start">
+                                                                @error('start_day')
+                                                                <small class = "form-text text-danger">{{$errors->first('start_day')}}</small>
+                                                                @enderror
                                                             </div>
                                                         </div>
                                                     </div><div class="card" style="width: 18rem;">
@@ -81,8 +87,11 @@
                                                             <h7>End day</h7>
                                                         </div>
                                                         <div class="card-body">
-                                                            <div class="form-group">
+                                                            <div class="form-group {{$errors->has('end_day') ? 'has-error':''}} ">
                                                                 <input class="date form-control" type="text" name="end_day" id="end_day">
+                                                                @error('end_day')
+                                                                <small class = "form-text text-danger">{{$errors->first('end_day')}}</small>
+                                                                @enderror
                                                             </div>
                                                         </div>
                                                     </div>
@@ -125,6 +134,8 @@
 
 <script type="text/javascript">
     $('.date').datepicker({
-        format: 'dd-mm-yyyy'
+        format: 'dd-mm-yyyy',
+        startDate: '01-01-2020',
+        endDate:'15-07-2020'
     });
 </script>

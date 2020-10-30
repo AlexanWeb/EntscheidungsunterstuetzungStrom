@@ -179,7 +179,7 @@
 
                 const name = e.currentTarget.textContent;
 
-                if(name === 'all'){
+                if(name === 'test'){
 
                     if(e.currentTarget.value === "false"){
 

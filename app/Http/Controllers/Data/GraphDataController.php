@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Data\Price\Prices_Day_Ahead;
 use App\Models\Data\Price\Prices_Interady;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class GraphDataController extends Controller
 {
@@ -25,6 +26,17 @@ class GraphDataController extends Controller
 
     public function store(Request $request)
     {
+        $rules = [
+            'type_sale' => 'required',
+            'start_day' => 'required|date_format:dd-mm-yyyy',
+            'end_day' => 'required|date_format:dd-mm-yyyy',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator -> fails()){
+            return redirect()->back()->withErrors($validator)->withInput($request->all());;
+        }
+
 
         if($request->type_sale == "day_Ahead"){
             return $this->day_ahead_Data($request);
