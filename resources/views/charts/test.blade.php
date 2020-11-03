@@ -27,8 +27,10 @@
                         <h1 class="h2">Dashboard</h1>
                         <div class="btn-toolbar mb-2 mb-md-0">
                             <div class="btn-group mr-2">
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary"
+                                        onclick="resetZoom()">Rest Zoom</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" id="drag-switch"
+                                        onclick="toggleDragMode()" >Disable drag mode</button>
                             </div>
                             <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
                                 <span data-feather="calendar"></span>
@@ -64,8 +66,12 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.3/js/bootstrap-select.min.js" charset="utf-8"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.js" charset="utf-8"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@0.7.7"></script>
 
 <script>
 
@@ -267,6 +273,11 @@
 
     ///////// BEGINN creat the INPUT Dataset für Chart //////////////
 
+    var dragOptions = {
+        animationDuration: 1000
+    };
+
+
     input = {
         type: 'line',
         data: {
@@ -282,11 +293,51 @@
             },
             scales: {
                 yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: "price"
+                    },
                     ticks: {
                         beginAtZero:false
                     }
+                }],
+                xAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: "Date"
+                    },
+                    ticks: {
+                        autoSkip: true,
+                        maxTicksLimit: 20
+                    }
                 }]
             },
+        plugins: {
+            zoom: {
+                // Container for pan options
+                pan: {
+                    // Boolean to enable panning
+                    enabled: true,
+                    drag: dragOptions,
+                    // Panning directions. Remove the appropriate direction to disable
+                    // Eg. 'y' would only allow panning in the y direction
+                    mode: 'xy',
+
+                    speed: 0.05
+
+                },
+
+                // Container for zoom options
+                zoom: {
+                    // Boolean to enable zooming
+                    enabled: true,
+
+                    // Zooming directions. Remove the appropriate direction to disable
+                    // Eg. 'y' would only allow zooming in the y direction
+                    mode: 'xy',
+                }
+            }
+        }
         }
     }
 
@@ -305,6 +356,26 @@
     ///////// ENDE creat the Chart //////////////
 
 
+
+    ////// BEGINN RestZoom Button ////////
+    function resetZoom() {
+        window.myLine.resetZoom();
+    }
+    ////// Ende RestZoom Button ////////
+
+
+    ////// BEGINN Diesblay Zoom Button ////////
+
+    window.toggleDragMode = function() {
+        var chart = window.myLine;
+        var zoomOptions = chart.options.plugins.zoom.zoom;
+        zoomOptions.drag = zoomOptions.drag ? false : dragOptions;
+
+        chart.update();
+        document.getElementById('drag-switch').innerText = zoomOptions.drag ? 'Disable drag mode' : 'Enable drag mode';
+    };
+
+    ////// BEGINN Diesblay Zoom Button ////////
 
 </script>
 </body>

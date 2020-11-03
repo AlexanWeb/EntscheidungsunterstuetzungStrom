@@ -11,19 +11,25 @@
 
                 <div class="card">
                     <div class="card-header">
-                        <h4>Type of sale</h4>
+                        <h4>Data</h4>
                     </div>
                     <div class="card-body">
                         <div class="custom-control custom-radio custom-control-inline">
-                            <input class="form-check-input" type="radio" name="type_sale" id="type_sale1" value="day_Ahead" checked>
+                            <input class="form-check-input" type="radio" name="data" id="type_sale1" value="day_Ahead" checked>
                             <label class="form-check-label" for="type_sale1">
-                                Day-Ahead Auction
+                                Price of Day-Ahead Auction
                             </label>
                         </div>
                         <div class="custom-control custom-radio custom-control-inline">
-                            <input class="form-check-input" type="radio" name="type_sale" id="type_sale2" value="intraday">
+                            <input class="form-check-input" type="radio" name="data" id="type_sale2" value="intraday">
                             <label class="form-check-label" for="type_sale2">
-                                Intraday Auction
+                                Price of Intraday Auction
+                            </label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input class="form-check-input" type="radio" name="data" id="market_values" value="market_values">
+                            <label class="form-check-label" for="market_values">
+                                Market values
                             </label>
                         </div>
                     </div>
