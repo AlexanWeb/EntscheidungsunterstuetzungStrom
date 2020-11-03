@@ -16,7 +16,7 @@ class CreateMarketValuesTable extends Migration
         Schema::create('market_values', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->date('Date');
-            $table->integer('Month');
+            $table->string('Month');
             $table->year('year');
             $table->double('MW_EPEX')->default(0);
             $table->double('MW_Wind_Onshore')->default(0);
