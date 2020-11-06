@@ -19,6 +19,7 @@ class MarketValues extends Model
 
     protected  $guarded = [];
 
+    protected $hidden = ['id','Year','created_at','updated_at'];
 
 
     public function uploadToTD($data){

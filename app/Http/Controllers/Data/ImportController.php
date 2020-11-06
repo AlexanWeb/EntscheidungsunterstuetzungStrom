@@ -38,18 +38,20 @@ class ImportController extends Controller
 
 
 
-        if($request->type_sale == "day_Ahead")
+        if($request->data == "day_Ahead")
         {
             $data = array_map('str_getcsv', file($file));
             $data = array_slice($data, 2);
             (new Prices_Day_Ahead())->uploadToTD($data);
 
-        } elseif ($request->type_sale == "intraday")
+        }
+        elseif ($request->data == "intraday")
         {
             $data = array_map('str_getcsv', file($file));
             $data = array_slice($data, 2);
             (new Prices_Interady())->uploadToTD($data);
-        } elseif ($request->data == "market_values"){
+        }
+        elseif ($request->data == "market_values"){
             // import the csv file with ; als delimiter
              $data = ($this->csv_to_array($file, ';'));
 

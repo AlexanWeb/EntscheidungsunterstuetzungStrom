@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Data;
 
-use App\Charts\GraphDataChart;
 use App\Http\Controllers\Controller;
+use App\Models\Data\MarketValues;
 use App\Models\Data\Price\Prices_Day_Ahead;
 use App\Models\Data\Price\Prices_Interady;
 use Illuminate\Http\Request;
@@ -28,8 +28,8 @@ class GraphDataController extends Controller
     {
         $rules = [
             'type_sale' => 'required',
-            'start_day' => 'required',
-            'end_day' => 'required',
+            'start_day' => 'required|date_format:d-m-Y|before:end_day',
+            'end_day' => 'required|date_format:d-m-Y|after:start_day',
         ];
         $validator = Validator::make($request->all(), $rules);
 
@@ -50,12 +50,16 @@ class GraphDataController extends Controller
 
         $start_date = date("Y-m-d", strtotime($request->start_day));
         $end_date = date("Y-m-d", strtotime($request->end_day));
+        $today = date("Y-m-d", strtotime($request->today));
+
+
+        $marketValues = $this->getMarketValues($start_date, $end_date);
 
         // $diff=date_diff($request->start_day,$request->today);
         $prices = Prices_Interady::whereBetween('Day', [$start_date, $end_date])->get();
         $prices = collect($prices);
 
-        $labels = $prices->transform(function ($temp) {
+        $prices->transform(function ($temp) {
             $data = [];
             $data[$temp->Day . ':Hour 01 Q1'] = round($temp->Hour_1_Q1 / 1000, 4);
             $data[$temp->Day . ':Hour 01 Q2'] = round($temp->Hour_1_Q2 / 1000, 4);
@@ -156,12 +160,23 @@ class GraphDataController extends Controller
             return $data;
         });
 
-        $result = call_user_func_array("array_merge", $labels->all());
-        $keys = array_keys($result);
-        $values = array_values($result);
-        //return $diff;
-         //return dd($values);
-        return view('charts.test', compact("keys", "values"));
+        $prices->transform(function ($temp) {
+            $data = [];
+            $data = array_reverse($temp);
+            return $data;
+        });
+
+
+        $prices = call_user_func_array("array_merge", $prices->all());
+
+
+        // reverse the array
+        $prices = array_reverse($prices);
+
+        $keys = array_keys($prices);
+        $values = array_values($prices);
+
+        return view('charts.index', compact("keys", "values", "start_date", "end_date", "today", "marketValues"));
     }
 
 
@@ -172,11 +187,15 @@ class GraphDataController extends Controller
         $end_date = date("Y-m-d", strtotime($request->end_day));
         $today = date("Y-m-d", strtotime($request->today));
 
-        // $diff=date_diff($request->start_day,$request->today);
+
+        $marketValues = $this->getMarketValues($start_date, $end_date);
+
+
+            // $marketValues = MarketValues::
         $prices = Prices_Day_Ahead::whereBetween('Day', [$start_date, $end_date])->get();
         $prices = collect($prices);
 
-        $labels = $prices->transform(function ($temp) {
+        $prices->transform(function ($temp) {
             $data = [];
             $data[$temp->Day . ':Hour 01'] = round($temp->Hour_1 / 1000, 4);
             $data[$temp->Day . ':Hour 02'] = round($temp->Hour_2 / 1000, 4);
@@ -205,11 +224,70 @@ class GraphDataController extends Controller
             return $data;
         });
 
-        $result = call_user_func_array("array_merge", $labels->all());
-        $keys = array_keys($result);
-        $values = array_values($result);
+        $prices->transform(function ($temp) {
+            $data = [];
+            $data = array_reverse($temp);
+            return $data;
+        });
+
+
+
+        // Merge all arrays in one array
+        $prices = call_user_func_array("array_merge", $prices->all());
+
+        // reverse the array
+        $prices = array_reverse($prices);
+
+
+        $keys = array_keys($prices);
+
+        $values = array_values($prices);
         //return $diff;
-        return view('charts.test', compact("keys", "values",  "start_date", "end_date", "today"));
+        return view('charts.index', compact("keys", "values",  "start_date", "end_date", "today", "marketValues"));
     }
+
+
+    /**
+     * @param date $start_date
+     * @param date $end_date
+     * @return array
+     */
+    protected function getMarketValues($start_date, $end_date): array
+    {
+        // first day of the start month
+        $firstday = date('Y-m-01', strtotime($start_date));
+
+        $result = MarketValues::whereBetween('Date', [$firstday, $end_date])->get();
+
+        $result = collect($result);
+
+        $result->transform(function ($temp) {
+
+            $data = [];
+
+            $data[$temp->Month] = ['Month' => $temp->Month,
+                'MW_EPEX' => $temp->MW_EPEX,
+                'MW_Wind_Onshore' => $temp->MW_Wind_Onshore,
+                'MW_Wind_Offshore' => $temp->MW_Wind_Offshore,
+                'MW_Solar' => $temp->MW_Solar];
+            return $data;
+        });
+
+        // Merge all arrays in one array
+        $result = call_user_func_array("array_merge", $result->all());
+
+
+        // dd(array_keys ( $result));
+
+
+        $marketValues = array("MW_EPEX" => array(), "MW_Wind_Onshore" => array(), "MW_Wind_Offshore" => array(), "MW_Solar" => array());
+        $marketValues["MW_EPEX"] = array_column($result, 'MW_EPEX', 'Month');
+        $marketValues["MW_Wind_Onshore"] = array_column($result, 'MW_Wind_Onshore', 'Month');
+        $marketValues["MW_Wind_Offshore"] = array_column($result, 'MW_Wind_Offshore', 'Month');
+        $marketValues["MW_Solar"] = array_column($result, 'MW_Solar', 'Month');
+        return $marketValues;
+    }
+
+
 
 }

@@ -50,6 +50,11 @@
 
                             </div>
                         </div>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <div class="btn-group-marketValue mr-2">
+
+                            </div>
+                        </div>
                     </div>
                     <div>
                         <br>
@@ -115,12 +120,12 @@
                     var ctx = chart.chart.ctx;
                     var chartArea = chart.chartArea;
                     var meta = chart.getDatasetMeta(0);
-                    var start = meta.data[(getDifferenceDays(start_date, today) * 24)]._model.x;
+                    var start = meta.data[(getDifferenceDays(start_date, today) * labelForDay)]._model.x;
                     var stop = meta.data[keys.length - 1]._model.x;
-                    console.log(start, stop);
+                    // console.log(start, stop);
                     ctx.save();
                     ctx.fillStyle = chart.config.options.chartArea.backgroundColor;
-                    console.log(chartArea);
+                    // console.log(chartArea);
                     ctx.fillRect(start, chartArea.top, stop - start, chartArea.bottom - chartArea.top);
                     ctx.restore();
                 }
@@ -135,11 +140,118 @@
     var keys = {!! json_encode($keys) !!};
     var price = {!! json_encode($values) !!};
     var powerplants =  {!! auth()->user()->powerplants->toJson() !!} ;
+
+
+
+
+
+    //// array of months //////
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+
+    /// save the days and months for the start day and end day //////
+
     var start_date =  new Date("{!! $start_date !!}") ;
     var end_date =  new Date("{!! $end_date !!}") ;
-    var today =  new Date("{!! $today !!}")  ;
+    var today =  new Date("{!! $today !!}");
 
-    console.log("yes" + getDifferenceDays (start_date, today));
+    var start_month = monthNames[start_date.getMonth()]; // month of start day
+
+    var marketValues = {!! json_encode($marketValues) !!};
+
+    // console.log("yes" + getDifferenceDays (start_date, today));
+
+
+
+    ///// start creat data for market values //////////
+
+    var start_month = monthNames[start_date.getMonth()]; // month of start day
+
+
+    var lastDayOfMonth = new Date(start_date.getFullYear(), start_date.getMonth()+1, 0);
+
+    var daysOfthefirst = new Date(start_date - 1);
+
+
+
+    /// get array of date between start day and end day
+    Date.prototype.addDays = function(days) {
+        var date = new Date(this.valueOf());
+        date.setDate(date.getDate() + days);
+        return date;
+    }
+
+    function getDates(startDate, stopDate) {
+        var dateArray = new Array();
+        var currentDate = startDate;
+        while (currentDate <= stopDate) {
+            dateArray.push(new Date (currentDate));
+            currentDate = currentDate.addDays(1);
+        }
+        return dateArray;
+    }
+
+    days = getDates(start_date, end_date); // the array of dates
+
+
+
+
+    const differncSD_ED = getDifferenceDays(start_date, end_date)+1;
+    const labelForDay = ((keys.length / differncSD_ED));
+
+
+    // add values to array for MW_EPEX
+    const MW_EPEX = [];
+
+    days.map(function(item){
+
+        for (i = 0; i <labelForDay; i++) {
+            MW_EPEX.push((marketValues.MW_EPEX[monthNames[item.getMonth()]]/100).toFixed(4));
+        }
+    });
+
+
+    // add values to array for MW_EPEX
+    const MW_Wind_Onshore = [];
+
+    days.map(function(item){
+
+        for (i = 0; i <labelForDay; i++) {
+            MW_Wind_Onshore.push((marketValues.MW_Wind_Onshore[monthNames[item.getMonth()]]/100).toFixed(4));
+        }
+    });
+
+
+    // add values to array for MW_EPEX
+    const MW_Wind_Offshore = [];
+
+    days.map(function(item){
+
+        for (i = 0; i <labelForDay; i++) {
+            MW_Wind_Offshore.push((marketValues.MW_Wind_Offshore[monthNames[item.getMonth()]]/100).toFixed(4));
+        }
+    });
+
+    // add values to array for MW_EPEX
+    const MW_Solar = [];
+    days.map(function(item){
+
+        for (i = 0; i <labelForDay; i++) {
+            MW_Solar.push((marketValues.MW_Solar[monthNames[item.getMonth()]]/100).toFixed(4));
+        }
+    });
+
+    const marketValuesresult = [];
+    marketValuesresult['MW_EPEX']= MW_EPEX;
+    marketValuesresult['MW_Wind_Onshore']= MW_Wind_Onshore;
+    marketValuesresult['MW_Wind_Offshore']= MW_Wind_Offshore;
+    marketValuesresult['MW_Solar']= MW_Solar;
+
+     // console.log(marketValuesresult);
+
+    ///// End creat data for market values //////////
+
 
 
 
@@ -157,9 +269,9 @@
 
 
 
-    ///////// BEGGINN  Creat Checkboxfür Chart //////////////
+    ///////// BEGGINN  Creat Checkbox of Power plants für Chart //////////////
 
-    const container = document.querySelector('.btn-group-power');
+    const container_power = document.querySelector('.btn-group-power');
     displayMenuButtons();
     function displayMenuButtons(){
         const names = powerplants.reduce(function (values, item){
@@ -174,8 +286,8 @@
             return `<button type="button" class="btn btn-sm btn-outline-secondary" data-id=${name} value= false>${name}</button>`
         }).join("");
 
-        container.innerHTML = namesBtns;
-        const filterBtns = container.querySelectorAll('.btn-outline-secondary');
+        container_power.innerHTML = namesBtns;
+        const filterBtns = container_power.querySelectorAll('.btn-outline-secondary');
         // filter items
         filterBtns.forEach(function(btn){
             btn.addEventListener('click', function(e){
@@ -231,9 +343,82 @@
 
 
 
+    ///////// BEGGINN  Creat Checkbox of  Market values for  Chart //////////////
+
+    const container_marketValue = document.querySelector('.btn-group-marketValue');
+    displayMenuButtonsOfMarketValues();
+    function displayMenuButtonsOfMarketValues(){
+        const names = Object.keys(marketValues).reduce(function (values, item){
+            if(!values.includes(item)){
+                values.push(item);
+            }
+            return values;
+        },['all']);
+
+        const namesBtns = names.map(function(name){
+
+            return `<button type="button" class="btn btn-sm btn-outline-secondary" data-id=${name} value= false>${name}</button>`
+        }).join("");
+
+        container_marketValue.innerHTML = namesBtns;
+        const filterBtns = container_marketValue.querySelectorAll('.btn-outline-secondary');
+        // filter items
+        filterBtns.forEach(function(btn){
+            btn.addEventListener('click', function(e){
+
+                const id = e.currentTarget.dataset.id;
+
+                const name = e.currentTarget.textContent;
+
+                if(name === 'test' ){   // if futten all test nur jetzt
+
+                    if(e.currentTarget.value === "false"){
+
+                        e.currentTarget.style.background= "#4CAF50";
+                        e.currentTarget.value = true;
+                        datas.forEach(function(menuitem){
+                            menuitem.hidden = false;
+
+                        });
+                    }
+                    else{
+                        e.currentTarget.style.background = "";
+                        e.currentTarget.value = false;
+                        datas.forEach(function(menuitem){
+                            menuitem.hidden = true;
+                        });
+                    }
+
+                }else{
+
+                    datas.forEach(function(menuitem){
+                        // console.log(menuItem.category);
+                        if(menuitem.label === name){
+                            if(menuitem.hidden === true){
+                                menuitem.hidden = false;
+                                e.currentTarget.style.background= "#4CAF50";
+                                e.currentTarget.value = true;
+                            } else{
+                                menuitem.hidden = true;
+                                e.currentTarget.style.background = "";
+                                e.currentTarget.value = false;
+                            }
+                        }
+
+                    });
+                }
+                myLine.update();
+            });
+        });
+    };
+
+    ///////// ENDE  Creat Checkbox of Market values für Chart //////////////
+
+
+
 
     ///////// BEGGINN  vorbereitung Dataset für Chart //////////////
-    const datas = powerplants.reduce(function (values, item){
+    const data_power = powerplants.reduce(function (values, item){
         values.push({data: Array(keys.length).fill(item.marginal_cost),
             label: item.name,
             fillColor: 'rgba(220,220,220,0.2)',
@@ -252,7 +437,7 @@
         return values;
     },[{
         data: price,
-        label: "Dataset 1",
+        label: "Price",
         fillColor: 'rgba(220,220,220,0.2)',
         strokeColor: 'rgba(220,220,220,1)',
         pointColor: 'rgba(220,220,220,1)',
@@ -265,10 +450,31 @@
         hidden: false
     }]);
 
+    ////////// add dataset of Market values to datas ///////////
+
+    // marketValuesresult
+
+    // Array(keys.length).fill((item.value/100).toFixed(4))
+    const datas = Object.keys(marketValues).reduce(function (values, item){
+        values.push({data: marketValuesresult[item],
+            label: item,
+            fillColor: 'rgba(220,220,220,0.2)',
+            strokeColor: 'rgba(220,220,220,1)',
+            pointColor: 'rgba(220,220,220,1)',
+            pointStrokeColor: '#fff',
+            pointHighlightFill: '#fff',
+            pointHighlightStroke:
+                'rgba(220,220,220,1)',
+            borderColor: getRandomColor(),
+            fill: false,
+            hidden: true
+        });
+
+        return values;
+    },data_power);
+
+
     ///////// ENDE  vorbereitung Dataset für Chart //////////////
-
-
-
 
 
     ///////// BEGINN creat the INPUT Dataset für Chart //////////////
