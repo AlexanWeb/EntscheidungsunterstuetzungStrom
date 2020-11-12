@@ -43,7 +43,6 @@ class MarketValues extends Model
                 'Negative_Stunden' => $this->jaOderNein($row[14])
             ]);
         }
-
     }
 
 

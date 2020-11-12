@@ -31,7 +31,7 @@ class Prices_Day_Ahead extends Model
         {
             Foreach($arr as $key => $value)
             {
-                If ($value == "")
+                If ($value == "") // prüft ob es null Wert gibt
                 {
                     if ($key == 3 and $data[$mapKey][4] != ""){
                         $data[$mapKey][$key] = $data[$mapKey][4];
@@ -41,9 +41,11 @@ class Prices_Day_Ahead extends Model
                     {
                         if ($data[$mapKey][$key-1]== "" or $data[$mapKey][$key+1]== "")
                         {
+                            // Mittelwert  vom Tag statt null werte speichern
                             $data[$mapKey][$key] = ($data[$mapKey][26]+ $data[$mapKey][27]) / 2;
                         }else
                         {
+                            // die Mittelwert von der vorherigen Stunde und der nächsten Stunde speichern
                             $data[$mapKey][$key] = ($data[$mapKey][$key-1] + $data[$mapKey][$key+1]) / 2;
                         }
                     }
