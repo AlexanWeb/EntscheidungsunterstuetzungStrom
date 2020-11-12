@@ -68,6 +68,7 @@ Route::group(['prefix' => 'account', 'middleware' =>['auth']], function () {
 Route::group(['prefix' => 'admin','namespace' => 'Admin', 'middleware' =>['auth', 'admin'], 'as' => 'admin.'], function (){
     Route::get('/impersonate', 'ImpersonateController@index')->name('impersonate.index');
     Route::post('/impersonate', 'ImpersonateController@start')->name('impersonate.start');
+    Route::get('/users', 'AdminController@users')->name('users');
 
 });
 
@@ -90,15 +91,16 @@ Route::group(['prefix' => 'subscription', 'as' => 'subscription.', 'middleware' 
 });
 
 ######### Begin import Data ############
-Route::group(['prefix' => 'admin'],function () {
+Route::group(['prefix' => 'admin', 'middleware' =>['auth', 'admin'], 'as' => 'admin.'],function () {
 
-    Route::get('/import', 'Data\ImportController@index')->name('admin.import');
-    Route::post('/import', 'Data\ImportController@store')->name('admin.upload');
+    Route::get('/import', 'Data\ImportController@index')->name('import');
+    Route::post('/import', 'Data\ImportController@store')->name('upload');
 });
 ######### End import Data ############
 
 
 Route::get('chart/input','Data\GraphDataController@index')->name('chart.input');
 Route::get('chart/input/test','Data\GraphDataController@store')->name('getDetails');
+Route::get('chart/boxplot/input','Data\GraphDataController@indexBoxplot')->name('chart.input_boxplot');
+Route::get('chart/boxplot','Data\GraphDataController@boxPlot')->name('chart.boxplot');
 
-Route::get('admin/users', 'Admin\AdminController@users')->name('admin.users');
