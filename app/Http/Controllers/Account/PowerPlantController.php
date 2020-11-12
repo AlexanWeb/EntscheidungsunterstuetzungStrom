@@ -20,20 +20,9 @@ class PowerPlantController extends Controller
         ###### get User ############
         $user = User::find($user_id);
 
-
-        //  find user for bestimmte powerplant
-        //
-
-        // $powerplant = PowerPlant::find($poerplant_id);
-
-         //   $user = $powerplant -> user;
-
         ########### get Machines ##########
 
         $machins = $user->powerplants;
-            // foreach ($machins as $machin){
-              //  echo $machin -> name.'<br>';
-            // }
 
         ############### get user and machins ########
 
@@ -46,9 +35,9 @@ class PowerPlantController extends Controller
     public function store(Request $request){
 
         $rules = [
-            'power_plant_name' => 'required|max:225',
-            'type_powerplant' => 'required|max:225',
-            'marginal_cost' => 'required|numeric',
+            'power_plant_name' => 'required|max:225', // string maximal 225
+            'type_powerplant' => 'required|max:225', // string maximal 225
+            'marginal_cost' => 'required|numeric', // nur Nummer eingeben
         ];
         $validator = Validator::make($request->all(), $rules);
 

@@ -42,12 +42,15 @@
 
                                 <td>
                                     <a href="#">
-                                        <button type="button" class="btn btn-success">Test</button>
+                                        <button type="button" class="btn btn-success"
+                                                onclick="return confirm('Are you sure? Do you want to make this User Admin')">
+                                            Test</button>
                                     </a>
                                     <a href="#"
                                        data-method="DELETE">
                                         <button type="submit" class="btn btn-danger"
-                                                onclick="return confirm('Are you sure?')">Test</button>
+                                                onclick="return confirm('Are you sure? Do you want to delete this User Admin')">
+                                            Test</button>
                                     </a>
                                 </td>
 
@@ -57,8 +60,8 @@
                     </tbody>
 
                 </table>
-                <a href="{{route('powerplant.index')}}">
-                    <button type="button" class="btn btn-primary btn-lg btn-block">Add new power plant</button>
+                <a href="#">
+                    <button type="button" class="btn btn-primary btn-lg btn-block">Add new User</button>
                 </a>
             </div>
         </div>

@@ -100,8 +100,11 @@
                                                             <h7>Today</h7>
                                                         </div>
                                                         <div class="card-body">
-                                                            <div class="form-group">
+                                                            <div class="form-group {{$errors->has('today') ? 'has-today':''}} ">
                                                                 <input class="date form-control" type="text" name="today" id="today">
+                                                                @error('today')
+                                                                <small class = "form-text text-danger">{{$errors->first('today')}}</small>
+                                                                @enderror
                                                             </div>
                                                         </div>
                                                     </div>

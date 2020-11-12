@@ -36,14 +36,11 @@ class ImportController extends Controller
 
         $file = $request->file('file')->getRealPath();
 
-
-
         if($request->data == "day_Ahead")
         {
             $data = array_map('str_getcsv', file($file));
-            $data = array_slice($data, 2);
+            $data = array_slice($data, 2); // return die Daten ohne erste zwei Zeille
             (new Prices_Day_Ahead())->uploadToTD($data);
-
         }
         elseif ($request->data == "intraday")
         {
@@ -55,10 +52,10 @@ class ImportController extends Controller
             // import the csv file with ; als delimiter
              $data = ($this->csv_to_array($file, ';'));
 
-            // delet the firts row
+            // delete the firts row
             $data = array_slice($data, 1);
 
-            // delet the empty rows
+            // delete the empty rows
             unset($data[1]);
             unset($data[4]);
             unset($data[7]);
@@ -117,24 +114,5 @@ class ImportController extends Controller
         return $out;
     }
 
-    function toNumber($target){
-        $switched = str_replace(',', '.', $target);
-        if(is_numeric($target)){
-            return intval($target);
-        }elseif(is_numeric($switched)){
-            return floatval($switched);
-        } else {
-            return $target;
-        }
-    }
-
-    private function jaOderNein($in)
-    {
-        if($in == 'Ja'){
-            return true;
-        }else{
-            return false;
-        }
-    }
 
 }
