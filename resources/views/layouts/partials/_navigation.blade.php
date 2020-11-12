@@ -46,10 +46,13 @@
                     @endimpersonating
 
                     @admin
-                    <li class="nav-item">
-                        <a class="nav-link" href="">Admin</a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="">Admin</a>
+                        </li>
                     @endadmin
+
+
+
 
                     <li class="nav-item dropdown">
 

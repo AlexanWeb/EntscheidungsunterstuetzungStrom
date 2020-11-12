@@ -53,11 +53,6 @@
 
     </li>
 
-    <li class="nav-item ">
-
-        <a class="nav-link {{return_if(on_page('admin/import'), 'active')}}" href="{{ route('admin.import') }}">Import Data</a>
-
-    </li>
 
     <li class="nav-item ">
 
@@ -67,7 +62,22 @@
 
     <li class="nav-item ">
 
+        <a class="nav-link {{return_if((on_page('chart/boxplot/input') || on_page('chart/boxplot' )), 'active')}}"
+           href="{{ route('chart.input_boxplot') }}">Box-Plot</a>
+
+    </li>
+
+    @admin
+    <li class="nav-item ">
+
+        <a class="nav-link {{return_if(on_page('admin/import'), 'active')}}" href="{{ route('admin.import') }}">Import Data</a>
+
+    </li>
+
+    <li class="nav-item ">
+
         <a class="nav-link {{return_if(on_page('admin/users'), 'active')}}" href="{{ route('admin.users') }}">Users</a>
 
     </li>
+    @endadmin
 </ul>

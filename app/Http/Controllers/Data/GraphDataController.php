@@ -8,6 +8,8 @@ use App\Models\Data\Price\Prices_Day_Ahead;
 use App\Models\Data\Price\Prices_Interady;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use \DateTime;
+
 
 class GraphDataController extends Controller
 {
@@ -22,6 +24,16 @@ class GraphDataController extends Controller
         return view('charts.input');
 
     }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function indexBoxplot ()
+    {
+        return view('charts.inputBoxPlot');
+
+    }
 
 
     public function store(Request $request)
@@ -29,7 +41,7 @@ class GraphDataController extends Controller
         $rules = [
             'type_sale' => 'required',
             'start_day' => 'required|date_format:d-m-Y|before:end_day',
-            'end_day' => 'required|date_format:d-m-Y|after:start_day',
+            'end_day' => 'required|date_format:d-m-Y|after:start_day'
         ];
         $validator = Validator::make($request->all(), $rules);
 
@@ -51,7 +63,6 @@ class GraphDataController extends Controller
         $start_date = date("Y-m-d", strtotime($request->start_day));
         $end_date = date("Y-m-d", strtotime($request->end_day));
         $today = date("Y-m-d", strtotime($request->today));
-
 
         $marketValues = $this->getMarketValues($start_date, $end_date);
 
@@ -166,9 +177,7 @@ class GraphDataController extends Controller
             return $data;
         });
 
-
         $prices = call_user_func_array("array_merge", $prices->all());
-
 
         // reverse the array
         $prices = array_reverse($prices);
@@ -289,5 +298,78 @@ class GraphDataController extends Controller
     }
 
 
+    public function boxPlot(Request $request)
+    {
+
+        $rules = [
+            'type_sale' => 'required',
+            'start_month' => 'required|date_format:m-Y|before:end_month',
+            'end_month' => 'required|date_format:m-Y|after:start_month'
+        ];
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator -> fails()){
+            return redirect()->back()->withErrors($validator)->withInput($request->all());;
+        }
+
+        $start = date("Y-m-d", strtotime('01-'.$request->start_month));
+        $end = date("Y-m-t", strtotime('01-'.$request->end_month));
+
+        $prices = Prices_Day_Ahead::whereBetween('Day', [$start, $end])->get(['Day','Minimum', 'Maximum']);
+        $prices = collect($prices);
+
+
+
+        //dd($prices->toArray());
+        $pdaMin = [];
+        $pdaMax = [];
+
+        foreach($prices as $arr) {
+            $pdaMin[date("m",strtotime($arr->Day))][] = $arr->Minimum ;
+            $pdaMax[date("m",strtotime($arr->Day))][] = $arr->Maximum ;
+        }
+
+        $data = [];
+        foreach ($pdaMin as $key => $value){
+            $dateObj = DateTime::createFromFormat('!m', $key);
+
+            $data['pda'][$dateObj->format('F')]['min'] = min($value);
+        }
+        foreach ($pdaMax as $key => $value){
+            $dateObj = DateTime::createFromFormat('!m', $key);
+
+            $data['pda'][$dateObj->format('F')]['max'] = max($value);
+        }
+
+        $pidprices = Prices_Interady::whereBetween('Day', [$start, $end])->get(['Day','Minimum', 'Maximum']);
+
+        $pidprices = collect($pidprices);
+
+        //dd($prices->toArray());
+        $pidMin = [];
+        $pidMax = [];
+
+        foreach($pidprices as $arr) {
+            $pidMin[date("m",strtotime($arr->Day))][] = $arr->Minimum ;
+            $pidMax[date("m",strtotime($arr->Day))][] = $arr->Maximum ;
+        }
+
+        foreach ($pidMin as $key => $value){
+            $dateObj = DateTime::createFromFormat('!m', $key);
+
+            $data['pid'][$dateObj->format('F')]['min'] = min($value);
+        }
+        foreach ($pidMax as $key => $value){
+            $dateObj = DateTime::createFromFormat('!m', $key);
+
+            $data['pid'][$dateObj->format('F')]['max'] = max($value);
+        }
+
+        $data['pda'] = array_reverse($data ['pda']);
+        $data['pid'] = array_reverse($data['pid']);
+
+        return view('charts.indexBoxPlot', compact("data"));
+
+    }
 
 }
