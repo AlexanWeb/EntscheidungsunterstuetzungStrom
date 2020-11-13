@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Data\Price\Prices_Day_Ahead;
 use App\Models\Data\Price\Prices_Interady;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class GraphDataController extends Controller
 {
@@ -25,6 +26,18 @@ class GraphDataController extends Controller
 
     public function store(Request $request)
     {
+        $rules = [
+            'type_sale' => 'required',
+            'start_day' => 'required',
+            'end_day' => 'required',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator -> fails()){
+            return redirect()->back()->withErrors($validator)->withInput($request->all());;
+        }
+
+
         if($request->type_sale == "day_Ahead"){
             return $this->day_ahead_Data($request);
         } elseif ($request->type_sale == "intraday"){
@@ -157,6 +170,7 @@ class GraphDataController extends Controller
 
         $start_date = date("Y-m-d", strtotime($request->start_day));
         $end_date = date("Y-m-d", strtotime($request->end_day));
+        $today = date("Y-m-d", strtotime($request->today));
 
         // $diff=date_diff($request->start_day,$request->today);
         $prices = Prices_Day_Ahead::whereBetween('Day', [$start_date, $end_date])->get();
@@ -195,7 +209,7 @@ class GraphDataController extends Controller
         $keys = array_keys($result);
         $values = array_values($result);
         //return $diff;
-        return view('charts.test', compact("keys", "values"));
+        return view('charts.test', compact("keys", "values",  "start_date", "end_date", "today"));
     }
 
 }
