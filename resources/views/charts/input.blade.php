@@ -72,7 +72,9 @@
                                             <div class="card-group">
                                                     <div class="card " style="width: 18rem;">
                                                         <div class="card-header">
-                                                            <h7>Start day</h7>
+                                                            <h7>
+                                                                <span data-feather="calendar"></span>
+                                                                Start day</h7>
                                                         </div>
                                                         <div class="card-body">
                                                             <div class="form-group {{$errors->has('start_day') ? 'has-error':''}}">
@@ -84,7 +86,9 @@
                                                         </div>
                                                     </div><div class="card" style="width: 18rem;">
                                                         <div class="card-header">
-                                                            <h7>End day</h7>
+                                                            <h7>
+                                                                <span data-feather="calendar"></span>
+                                                                End day</h7>
                                                         </div>
                                                         <div class="card-body">
                                                             <div class="form-group {{$errors->has('end_day') ? 'has-error':''}} ">
@@ -97,7 +101,9 @@
                                                     </div>
                                                     <div class="card" style="width: 18rem;">
                                                         <div class="card-header">
-                                                            <h7>Today</h7>
+                                                            <h7>
+                                                                <span data-feather="calendar"></span>
+                                                                Today</h7>
                                                         </div>
                                                         <div class="card-body">
                                                             <div class="form-group {{$errors->has('today') ? 'has-today':''}} ">
@@ -127,18 +133,24 @@
     </div>
     @include('layouts.footer')
 </div>
-<script src="{{URL::asset('js/bootstrap.js')}}"></script>
 @yield('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
 
 </body>
 </html>
 
 
 <script type="text/javascript">
+
+    feather.replace();
+
+    var end = {!! json_encode($end) !!};
+    var start = {!! json_encode($start) !!};
+    console.log(end);
     $('.date').datepicker({
         format: 'dd-mm-yyyy',
-        startDate: '01-01-2020',
-        endDate:'15-07-2020'
+        startDate: start,
+        endDate: end
     });
 </script>

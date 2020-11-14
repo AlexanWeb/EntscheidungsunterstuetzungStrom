@@ -58,6 +58,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@0.7.7"></script>
 
 <script>
+    feather.replace();
 
 
     var data = {!! json_encode($data) !!};

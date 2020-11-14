@@ -21,7 +21,11 @@ class GraphDataController extends Controller
      */
     public function index()
     {
-        return view('charts.input');
+        $end = \DB::table('prices__day__aheads')->orderBy('Day','desc')->first('Day');
+        $end = date("d-m-Y", strtotime($end->Day));
+        $start = \DB::table('prices__day__aheads')->orderBy('Day','asc')->first('Day');
+        $start = date("d-m-Y", strtotime($start->Day));
+        return view('charts.input', compact('end', 'start'));
 
     }
     /**
