@@ -52,4 +52,16 @@ class User extends Authenticatable
     public function powerplants(){
         return $this->hasMany('App\Models\PowerPlant', 'user_id', 'id');
     }
+
+
+    public function roles()
+    {
+        return $this->belongsToMany( 'App\Models\Role', 'role_user' );
+    }
+
+
+    public function hasRolles(  Role $role )
+    {
+        return $this->roles->contains( $role );
+    }
 }

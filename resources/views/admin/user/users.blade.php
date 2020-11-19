@@ -41,10 +41,10 @@
                                 </td>
 
                                 <td>
-                                    <a href="#">
+                                    <a href="{{route('admin.user.edit', $user->id)}}">
                                         <button type="button" class="btn btn-success"
                                                 onclick="return confirm('Are you sure? Do you want to make this User Admin')">
-                                            Test</button>
+                                            Roles</button>
                                     </a>
                                     <a href="#"
                                        data-method="DELETE">

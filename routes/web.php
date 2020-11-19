@@ -69,6 +69,11 @@ Route::group(['prefix' => 'admin','namespace' => 'Admin', 'middleware' =>['auth'
     Route::get('/impersonate', 'ImpersonateController@index')->name('impersonate.index');
     Route::post('/impersonate', 'ImpersonateController@start')->name('impersonate.start');
     Route::get('/users', 'AdminController@users')->name('users');
+    Route::get('/makeAdmin{id}', 'AdminController@makeAdmin')->name('make.admin');
+
+    Route::get('/user/{id}/roles','AdminController@edit')->name('user.edit');
+    Route::post('/user/{id}/roles','AdminController@update')->name('user.update');
+
 
 });
 
