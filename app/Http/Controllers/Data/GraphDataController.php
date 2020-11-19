@@ -306,7 +306,6 @@ class GraphDataController extends Controller
     {
 
         $rules = [
-            'type_sale' => 'required',
             'start_month' => 'required|date_format:m-Y|before:end_month',
             'end_month' => 'required|date_format:m-Y|after:start_month'
         ];
@@ -322,9 +321,6 @@ class GraphDataController extends Controller
         $prices = Prices_Day_Ahead::whereBetween('Day', [$start, $end])->get(['Day','Minimum', 'Maximum']);
         $prices = collect($prices);
 
-
-
-        //dd($prices->toArray());
         $pdaMin = [];
         $pdaMax = [];
 

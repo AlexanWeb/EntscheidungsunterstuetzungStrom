@@ -39,29 +39,6 @@
                         <div class="card-body">
                             <form class="form-horizontal" method="GET" action="{{ route('chart.boxplot') }}" >
                                 {{ csrf_field() }}
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h6>Type of sale</h6>
-                                    </div>
-                                    <div class="card-body {{$errors->has('type_sale') ? 'has-error':''}}">
-                                        <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="form-check-input" type="radio" name="type_sale" id="type_sale1" value="day_Ahead" checked>
-                                            <label class="form-check-label" for="type_sale1">
-                                                Day-Ahead Auction
-                                            </label>
-                                        </div>
-                                        <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="form-check-input" type="radio" name="type_sale" id="type_sale2" value="intraday">
-                                            <label class="form-check-label" for="type_sale2">
-                                                Intraday Auction
-                                            </label>
-                                        </div>
-                                        @error('type_sale')
-                                        <small class = "form-text text-danger">{{$errors->first('type_sale')}}</small>
-                                        @enderror
-                                    </div>
-
-                                </div>
                                 <br>
                                 <div class="card row">
                                     <div class="card-header">
@@ -73,7 +50,8 @@
                                                 <div class="card-header">
                                                     <h7>
                                                         <span data-feather="calendar"></span>
-                                                        Start month</h7>
+                                                        Start month
+                                                    </h7>
                                                 </div>
                                                 <div class="card-body">
                                                     <div class="form-group {{$errors->has('start_day') ? 'has-error':''}}">
