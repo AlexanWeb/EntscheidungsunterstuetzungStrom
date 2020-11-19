@@ -9,15 +9,35 @@
                     <thead>
                         <tr>
 
-                            <th scope="col">ID</th>
+                            <th scope="col">
+                                <div class="row justify-content-center">
+                                    ID
+                                </div>
+                                </th>
 
-                            <th scope="col">Name</th>
+                            <th scope="col">
+                                <div class="row justify-content-center">
+                                    Name
+                                </div>
+                                </th>
 
-                            <th scope="col">Email</th>
+                            <th scope="col">
+                                <div class="row justify-content-center">
+                                    Email
+                                </div>
+                                </th>
 
-                            <th scope="col">Show power plants</th>
+                            <th scope="col">
+                                <div class="row justify-content-center">
+                                    Show power plants
+                                </div>
+                                </th>
 
-                            <th scope="col">Actions</th>
+                            <th scope="col">
+                                <div class="row justify-content-center">
+                                    Actions
+                                </div>
+                                </th>
 
                         </tr>
                     </thead>
@@ -29,29 +49,47 @@
 
                             <tr>
 
-                                <th scope="row">{{$user->id}}</th>
+                                <th scope="row">
+                                    <div class="row justify-content-center ">
+                                        {{$user->id}}
+                                    </div>
+                                </th>
 
-                                <td>{{$user->name}} </td>
-
-                                <td>{{$user->email}} </td>
-
-                                <td> <a href="{{route('user.powerplants', $user->id)}}">
-                                        <button type="button" class="btn btn-primary">Show</button>
-                                    </a>
+                                <td>
+                                    <div class="row justify-content-center">
+                                        {{$user->name}}
+                                    </div>
                                 </td>
 
                                 <td>
-                                    <a href="{{route('admin.user.edit', $user->id)}}">
-                                        <button type="button" class="btn btn-success"
-                                                onclick="return confirm('Are you sure? Do you want to make this User Admin')">
-                                            Roles</button>
-                                    </a>
-                                    <a href="#"
-                                       data-method="DELETE">
-                                        <button type="submit" class="btn btn-danger"
-                                                onclick="return confirm('Are you sure? Do you want to delete this User Admin')">
-                                            Test</button>
-                                    </a>
+                                    <div class="row justify-content-center">
+                                        {{$user->email}}
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="row justify-content-center">
+                                        <a href="{{route('user.powerplants', $user->id)}}">
+                                            <button type="button" class="btn btn-primary">Show</button>
+                                        </a>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="row justify-content-center">
+                                        <a href="{{route('admin.user.edit', $user->id)}}">
+                                            <button type="button" class="btn btn-success">
+                                                Roles</button>
+                                        </a>
+                                        <a href="#"
+                                           data-method="DELETE">
+                                            <button type="submit" class="btn btn-danger"
+                                                    onclick="return confirm('Are you sure? Do you want to delete this User Admin')">
+                                                Test</button>
+                                        </a>
+                                    </div>
+
+
                                 </td>
 
                             </tr>
