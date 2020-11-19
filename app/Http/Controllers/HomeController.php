@@ -70,12 +70,7 @@ class HomeController extends Controller
                 $maxDateArray[] = $hourMax;
             }
         }
-        //echo ($prices_day_ahead->toArray())[0];
-        if ($request->file('file')) {
-            $file = $request->file('file')->getRealPath();
-        }
-        echo 'sadfg';
-        echo  $request->file('file'). 'sdfhgdlfgjköl';
+
         //Assume a hit every time, might need some counter measure to prevent null data
         return view('home', ['chart' => $chart, 'dby'=>$prices_day_ahead[0]
             , 'dbt'=>$prices_day_ahead[1],'dbtm'=>$prices_day_ahead[2], 'hY' => $maxDateArray, 'test' => 'Hour_1' ]);

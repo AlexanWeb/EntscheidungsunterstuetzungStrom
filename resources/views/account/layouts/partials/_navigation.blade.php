@@ -2,6 +2,14 @@
 
     <li class="nav-item ">
 
+        <a class="nav-link {{return_if(on_page('home')||on_page('/'), 'active')}}" href="{{route('home')}}">
+            <span data-feather="home"></span>
+            Home</a>
+
+    </li>
+
+    <li class="nav-item ">
+
         <a class="nav-link {{return_if(on_page('account'), 'active')}}" href="{{route('account.index')}}">
             <span data-feather="user"></span>
             Account overview</a>
@@ -26,8 +34,8 @@
     <li class="nav-item">
 
         <a class="nav-link {{return_if(on_page('account/deactivate'), 'active')}}" href="{{route('deactivate.index')}}">
-            <span data-feather="lock"></span>
-            Deactivate Password</a>
+            <span data-feather="trash-2"></span>
+            Deactivate Account</a>
 
     </li>
 
@@ -72,7 +80,7 @@
 
     <li class="nav-item ">
 
-        <a class="nav-link {{return_if(on_page('chart/input'), 'active')}}" href="{{ route('chart.input')}}">
+        <a class="nav-link {{return_if(on_page('chart/input')||on_page('chart/input/test'), 'active')}}" href="{{ route('chart.input')}}">
             <span data-feather="bar-chart-2"></span>
             Chart</a>
 
