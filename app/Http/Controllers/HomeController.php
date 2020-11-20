@@ -85,15 +85,16 @@ class HomeController extends Controller
                 $hourMax = array_search($prices_interady[$i]['Maximum'] ,$prices_interady->toArray()[$i]);
                 //$prices_day_ahead[0]['Maximum']
                 if (Isset($hourMax) && strcmp($hourMax,'Maximum') != 0) {
+                    $QuartarMax = explode('_', $hourMax)[2];
                     $hourMax = explode('_', $hourMax)[1];
                     //3600 are seconds in a hour
-                    $hourMax = date('H:i', 3600 * $hourMax);
+                    // $hourMax = date('H:i', 3600 * $hourMax);
+                    $hourMax = $hourMax.'_'.$QuartarMax;
                 }
                 //$maxDateArray[] = $dateMax;
                 $maxDateArray_pid[] = $hourMax;
             }
         }
-
         //Assume a hit every time, might need some counter measure to prevent null data
         return view('home',
             ['dby'=>$prices_day_ahead[0], 'dbt'=>$prices_day_ahead[1],'dbtm'=>$prices_day_ahead[2], 'hY' => $maxDateArray,
