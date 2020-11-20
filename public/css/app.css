@@ -713,6 +713,7 @@ pre code {
 .col-md-3,
 .col-md-2,
 .col-md-1,
+.col-md-7-5,
 .col-sm,
 .col-sm-auto,
 .col-sm-12,
@@ -1290,6 +1291,12 @@ pre code {
     -webkit-box-flex: 0;
             flex: 0 0 8.3333333333%;
     max-width: 8.3333333333%;
+  }
+
+  .col-md-6-25{
+      -webkit-box-flex: 0;
+      flex: 0 0 6.25%;
+      max-width: 6.25%;
   }
 
   .col-md-2 {
