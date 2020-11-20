@@ -11,7 +11,8 @@
             <form action="{{route('home')}}" method="GET">
                 {{csrf_field()}}
                 <label for="date_example" class="control-label">Today</label>
-                <input type="date" name="date_example" id="date_example" class="form-control">
+                <input type="date" name="date_example" id="date_example" class="form-control"
+                       min="2020-01-01" max="2020-07-15">
 
                 <button type="submit"class="btn btn-primary mt-1">Update</button>
             </form>
