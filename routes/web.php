@@ -101,9 +101,15 @@ Route::group(['prefix' => 'admin', 'middleware' =>['auth', 'admin'], 'as' => 'ad
 });
 ######### End import Data ############
 
+########## Begin charts #############
+Route::group(['prefix' => 'chart', 'middleware' =>['auth']], function () {
 
-Route::get('chart/input','Data\GraphDataController@index')->name('chart.input');
-Route::get('chart/input/test','Data\GraphDataController@store')->name('getDetails');
-Route::get('chart/boxplot/input','Data\GraphDataController@indexBoxplot')->name('chart.input_boxplot');
-Route::get('chart/boxplot','Data\GraphDataController@boxPlot')->name('chart.boxplot');
+    Route::get('/input','Data\GraphDataController@index')->name('chart.input');
+    Route::get('/input/test','Data\GraphDataController@store')->name('getDetails');
+    Route::get('/boxplot/input','Data\GraphDataController@indexBoxplot')->name('chart.input_boxplot');
+    Route::get('/boxplot','Data\GraphDataController@boxPlot')->name('chart.boxplot');
+});
+
+######### Ende Charts ##############
+
 
