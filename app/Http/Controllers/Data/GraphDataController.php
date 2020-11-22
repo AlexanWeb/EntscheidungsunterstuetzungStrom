@@ -76,7 +76,23 @@ class GraphDataController extends Controller
 
         $prices->transform(function ($temp) {
             $data = [];
-            $data[$temp->Day . ':Hour 01 Q1'] = round($temp->Hour_1_Q1 / 1000, 4);
+            for ($i = 1; $i < 25; $i++){
+                if($i==3){
+                    for($j = 1; $j < 5; $j++){
+                        $data[$temp->Day . ':Hour 0'.$i.' Q'.$j] = round($temp['Hour_'.$i.'A_Q'.$j] / 1000, 4);
+                    }
+                }else{
+                    for($j = 1; $j < 5; $j++){
+                        if ($i < 10){
+                            $data[$temp->Day . ':Hour 0'.$i.' Q'.$j] = round($temp['Hour_'.$i.'_Q'.$j] / 1000, 4);
+                        }else{
+                            $data[$temp->Day . ':Hour '.$i.' Q'.$j] = round($temp['Hour_'.$i.'_Q'.$j] / 1000, 4);
+                        }
+
+                    }
+                }
+            }
+            /*$data[$temp->Day . ':Hour 01 Q1'] = round($temp->Hour_1_Q1 / 1000, 4);
             $data[$temp->Day . ':Hour 01 Q2'] = round($temp->Hour_1_Q2 / 1000, 4);
             $data[$temp->Day . ':Hour 01 Q3'] = round($temp->Hour_1_Q3 / 1000, 4);
             $data[$temp->Day . ':Hour 01 Q4'] = round($temp->Hour_1_Q4 / 1000, 4);
@@ -171,7 +187,7 @@ class GraphDataController extends Controller
             $data[$temp->Day . ':Hour 24 Q1'] = round($temp->Hour_24_Q1 / 1000, 4);
             $data[$temp->Day . ':Hour 24 Q2'] = round($temp->Hour_24_Q2 / 1000, 4);
             $data[$temp->Day . ':Hour 24 Q3'] = round($temp->Hour_24_Q3 / 1000, 4);
-            $data[$temp->Day . ':Hour 24 Q4'] = round($temp->Hour_24_Q4 / 1000, 4);
+            $data[$temp->Day . ':Hour 24 Q4'] = round($temp->Hour_24_Q4 / 1000, 4);*/
             return $data;
         });
 
@@ -185,6 +201,7 @@ class GraphDataController extends Controller
 
         // reverse the array
         $prices = array_reverse($prices);
+
 
         $keys = array_keys($prices);
         $values = array_values($prices);
@@ -210,7 +227,23 @@ class GraphDataController extends Controller
 
         $prices->transform(function ($temp) {
             $data = [];
-            $data[$temp->Day . ':Hour 01'] = round($temp->Hour_1 / 1000, 4);
+
+
+            for ($i = 1; $i < 25; $i++) {
+                if ($i == 3) {
+                    $data[$temp->Day . ':Hour 0' . $i] = round($temp['Hour_' . $i.'A'] / 1000, 4);
+
+                } else {
+                    if ($i < 10) {
+                        $data[$temp->Day . ':Hour 0' . $i] = round($temp['Hour_' . $i] / 1000, 4);
+                    } else {
+                        $data[$temp->Day . ':Hour ' . $i] = round($temp['Hour_' . $i] / 1000, 4);
+                    }
+                }
+            }
+
+
+            /*$data[$temp->Day . ':Hour 01'] = round($temp->Hour_1 / 1000, 4);
             $data[$temp->Day . ':Hour 02'] = round($temp->Hour_2 / 1000, 4);
             $data[$temp->Day . ':Hour 03'] = round($temp->Hour_3A / 1000, 4);
             $data[$temp->Day . ':Hour 04'] = round($temp->Hour_4 / 1000, 4);
@@ -233,7 +266,7 @@ class GraphDataController extends Controller
             $data[$temp->Day . ':Hour 21'] = round($temp->Hour_21 / 1000, 4);
             $data[$temp->Day . ':Hour 22'] = round($temp->Hour_22 / 1000, 4);
             $data[$temp->Day . ':Hour 23'] = round($temp->Hour_23 / 1000, 4);
-            $data[$temp->Day . ':Hour 24'] = round($temp->Hour_24 / 1000, 4);
+            $data[$temp->Day . ':Hour 24'] = round($temp->Hour_24 / 1000, 4);*/
             return $data;
         });
 
@@ -250,7 +283,6 @@ class GraphDataController extends Controller
 
         // reverse the array
         $prices = array_reverse($prices);
-
 
         $keys = array_keys($prices);
 
