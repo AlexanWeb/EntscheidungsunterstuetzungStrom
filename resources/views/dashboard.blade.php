@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('account.layouts.default')
 
-@section('content')
+@section('account.content')
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    You are logged in!
+                    <h4>Sorry No Data now in System, Please wait until the Admin have to load the Data</h4>
                 </div>
             </div>
         </div>

@@ -30,83 +30,95 @@ class HomeController extends Controller
     {
 
 
-        $end_pda = \DB::table('prices__day__aheads')->orderBy('Day','desc')->first('Day');
-        $end_pda = date("Y-m-d", strtotime($end_pda->Day));
-        $start_pda = \DB::table('prices__day__aheads')->orderBy('Day','asc')->first('Day');
-        $start_pda = date("Y-m-d", strtotime($start_pda->Day));
+        $test_pda = \DB::table('prices__day__aheads')->first();
+        $test_pid = \DB::table('prices__interadies')->first();
+        // dd(count($test_pda->isEmpty()));
+        // dd((count($test_pda) > 0 && $test_pid->isEmpty()));
+        if(!$test_pid || !$test_pda){
 
-        $end_pid = \DB::table('prices__interadies')->orderBy('Day','desc')->first('Day');
-        $end_pid = date("Y-m-d", strtotime($end_pid->Day.' -1 day'));
-        $start_pid = \DB::table('prices__interadies')->orderBy('Day','asc')->first('Day');
-        $start_pid = date("Y-m-d", strtotime($start_pid->Day.' +1 day'));
+            return view('dashboard');
+        }else{
 
-        $end=$end_pda;
-        $start=$start_pda;
+            $end_pda = \DB::table('prices__day__aheads')->orderBy('Day','desc')->first('Day');
+            $end_pda = date("Y-m-d", strtotime($end_pda->Day));
+            $start_pda = \DB::table('prices__day__aheads')->orderBy('Day','asc')->first('Day');
+            $start_pda = date("Y-m-d", strtotime($start_pda->Day));
 
-        if ($end_pda>$end_pid){
-            $end=$end_pid;
-        }
+            $end_pid = \DB::table('prices__interadies')->orderBy('Day','desc')->first('Day');
+            $end_pid = date("Y-m-d", strtotime($end_pid->Day.' -1 day'));
+            $start_pid = \DB::table('prices__interadies')->orderBy('Day','asc')->first('Day');
+            $start_pid = date("Y-m-d", strtotime($start_pid->Day.' +1 day'));
 
-        if ($start_pid>$start_pda){
-            $start=$start_pid;
-        }
+            $end=$end_pda;
+            $start=$start_pda;
 
-
-        $tempDate = '07.07.2020';
-        if($request->filled('date_example')) {
-            $tempDate = $request->date_example;
-        }
-
-        $prices_day_ahead = Prices_Day_Ahead::where('Day', '>=', date('Y-m-d', strtotime('-1 days',strtotime($tempDate))))
-            ->where('Day', '<=', date('Y-m-d', strtotime('+2 days',strtotime($tempDate))))
-            ->orderBy('Day')
-            ->get();
-        $maxDateArray = [];
-
-
-        if (count($prices_day_ahead) == 4){
-            for ($i = 0; $i < 4; $i++) {
-                //$dateMax = $prices_day_ahead[$i]['Day'];
-                $hourMax = array_search($prices_day_ahead[$i]['Maximum'] ,$prices_day_ahead->toArray()[$i]);
-                //$prices_day_ahead[0]['Maximum']
-                if (Isset($hourMax) && strcmp($hourMax,'Maximum') != 0) {
-                    $hourMax = explode('_', $hourMax)[1];
-                    //3600 are seconds in a hour
-                    $hourMax = date('H:i', 3600 * $hourMax);
-                }
-                //$maxDateArray[] = $dateMax;
-                $maxDateArray[] = $hourMax;
+            if ($end_pda>$end_pid){
+                $end=$end_pid;
             }
-        }
 
-
-        $prices_interady = Prices_Interady::where('Day', '>=', date('Y-m-d', strtotime('-1 days',strtotime($tempDate))))
-            ->where('Day', '<=', date('Y-m-d', strtotime('+2 days',strtotime($tempDate))))
-            ->orderBy('Day')
-            ->get();
-        $maxDateArray_pid = [];
-
-        if (count($prices_interady) == 4){
-            for ($i = 0; $i < 4; $i++) {
-                //$dateMax = $prices_day_ahead[$i]['Day'];
-                $hourMax = array_search($prices_interady[$i]['Maximum'] ,$prices_interady->toArray()[$i]);
-                //$prices_day_ahead[0]['Maximum']
-                if (Isset($hourMax) && strcmp($hourMax,'Maximum') != 0) {
-                    $QuartarMax = explode('_', $hourMax)[2];
-                    $hourMax = explode('_', $hourMax)[1];
-                    //3600 are seconds in a hour
-                    // $hourMax = date('H:i', 3600 * $hourMax);
-                    $hourMax = $hourMax.'_'.$QuartarMax;
-                }
-                //$maxDateArray[] = $dateMax;
-                $maxDateArray_pid[] = $hourMax;
+            if ($start_pid>$start_pda){
+                $start=$start_pid;
             }
+
+
+            $tempDate = '07.07.2020';
+            if($request->filled('date_example')) {
+                $tempDate = $request->date_example;
+            }
+
+            $prices_day_ahead = Prices_Day_Ahead::where('Day', '>=', date('Y-m-d', strtotime('-1 days',strtotime($tempDate))))
+                ->where('Day', '<=', date('Y-m-d', strtotime('+2 days',strtotime($tempDate))))
+                ->orderBy('Day')
+                ->get();
+            $maxDateArray = [];
+
+
+            if (count($prices_day_ahead) == 4){
+                for ($i = 0; $i < 4; $i++) {
+                    //$dateMax = $prices_day_ahead[$i]['Day'];
+                    $hourMax = array_search($prices_day_ahead[$i]['Maximum'] ,$prices_day_ahead->toArray()[$i]);
+                    //$prices_day_ahead[0]['Maximum']
+                    if (Isset($hourMax) && strcmp($hourMax,'Maximum') != 0) {
+                        $hourMax = explode('_', $hourMax)[1];
+                        //3600 are seconds in a hour
+                        $hourMax = date('H:i', 3600 * $hourMax);
+                    }
+                    //$maxDateArray[] = $dateMax;
+                    $maxDateArray[] = $hourMax;
+                }
+            }
+
+
+            $prices_interady = Prices_Interady::where('Day', '>=', date('Y-m-d', strtotime('-1 days',strtotime($tempDate))))
+                ->where('Day', '<=', date('Y-m-d', strtotime('+2 days',strtotime($tempDate))))
+                ->orderBy('Day')
+                ->get();
+            $maxDateArray_pid = [];
+
+
+            if (count($prices_interady) == 4){
+                for ($i = 0; $i < 4; $i++) {
+                    //$dateMax = $prices_day_ahead[$i]['Day'];
+                    $hourMax = array_search($prices_interady[$i]['Maximum'] ,$prices_interady->toArray()[$i]);
+                    //$prices_day_ahead[0]['Maximum']
+                    if (Isset($hourMax) && strcmp($hourMax,'Maximum') != 0) {
+                        $QuartarMax = explode('_', $hourMax)[2];
+                        $hourMax = explode('_', $hourMax)[1];
+                        //3600 are seconds in a hour
+                        // $hourMax = date('H:i', 3600 * $hourMax);
+                        $hourMax = $hourMax.'_'.$QuartarMax;
+                    }
+                    //$maxDateArray[] = $dateMax;
+                    $maxDateArray_pid[] = $hourMax;
+                }
+            }
+
+            //Assume a hit every time, might need some counter measure to prevent null data
+            return view('home',
+                [ 'end' =>$end, 'start' =>$start,
+                    'dby'=>$prices_day_ahead[0], 'dbt'=>$prices_day_ahead[1],'dbtm'=>$prices_day_ahead[2],'dbtum'=>$prices_day_ahead[3], 'hY' => $maxDateArray,
+                    'dby_pid'=>$prices_interady[0], 'dbt_pid'=>$prices_interady[1],'dbtm_pid'=>$prices_interady[2],'dbtum_pid'=>$prices_interady[3], 'hY_pid' => $maxDateArray_pid]);
         }
 
-        //Assume a hit every time, might need some counter measure to prevent null data
-        return view('home',
-            [ 'end' =>$end, 'start' =>$start,
-                'dby'=>$prices_day_ahead[0], 'dbt'=>$prices_day_ahead[1],'dbtm'=>$prices_day_ahead[2],'dbtum'=>$prices_day_ahead[3], 'hY' => $maxDateArray,
-                'dby_pid'=>$prices_interady[0], 'dbt_pid'=>$prices_interady[1],'dbtm_pid'=>$prices_interady[2],'dbtum_pid'=>$prices_interady[3], 'hY_pid' => $maxDateArray_pid]);
     }
 }
