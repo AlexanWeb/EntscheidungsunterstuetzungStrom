@@ -147,7 +147,7 @@
 
     var end = {!! json_encode($end) !!};
     var start = {!! json_encode($start) !!};
-    console.log(end);
+
     $('.date').datepicker({
         format: 'dd-mm-yyyy',
         startDate: start,

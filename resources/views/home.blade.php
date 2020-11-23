@@ -12,7 +12,7 @@
                 {{csrf_field()}}
                 <label for="date_example" class="control-label">Today</label>
                 <input type="date" name="date_example" id="date_example" class="form-control"
-                       min="2020-01-01" max="2020-07-15">
+                       min={{$start}} max={{$end}}>
 
                 <button type="submit"class="btn btn-primary mt-1">Update</button>
             </form>
@@ -84,7 +84,6 @@
     <div class="card">
         <h5 class="card-header">Angagen für Preise in MHw. Prices intera day</h5>
         <div class="card-body">
-
             <div class="container-fluid">
 
                 <div class="row">

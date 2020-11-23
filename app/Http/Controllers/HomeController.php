@@ -4,12 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Data\Price\Prices_Day_Ahead;
 use App\Models\Data\Price\Prices_Interady;
-use App\Models\GraphData;
-use App\Charts\GraphDataChart;
+
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
-use PhpParser\Node\Expr\Isset_;
+
 
 class HomeController extends Controller
 {
@@ -30,22 +28,29 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        // $tempvar = file_get_contents("https://api.awattar.de/v1/marketdata");
-        // $tempvar = str_replace("}", "", $tempvar);
-        // $tempvar = explode ("{",$tempvar);
-        // $startVars = [];
-        // $prices = [];
-        // for ($i = 2; $i < count($tempvar); $i++) {
-        //    $startVars[$i-2] =date("Y-m-d",  explode (":", explode(",", $tempvar[$i])[1])[1]);
-        //    $prices[$i-2] =   explode(":", explode (",",$tempvar[$i])[2])[1];
-        // }
-        // $chart = new GraphDataChart;
-        // $chart->labels($startVars);
-        // $chart->dataset('TestChart', 'line', $prices);
-        // For later use, this for test vaulues it will be fit to the test data
-        // $prices_day_ahead = Prices_Day_Ahead::where('Day', '=>', Carbon::yesterday()->format('Y-m-d'))
-        //    ->where('Day', '<', Carbon::tomorrow()->addDay()->format('Y-m-d'))->get();
-        // $tempDate = Carbon::yesterday();
+
+
+        $end_pda = \DB::table('prices__day__aheads')->orderBy('Day','desc')->first('Day');
+        $end_pda = date("Y-m-d", strtotime($end_pda->Day));
+        $start_pda = \DB::table('prices__day__aheads')->orderBy('Day','asc')->first('Day');
+        $start_pda = date("Y-m-d", strtotime($start_pda->Day));
+
+        $end_pid = \DB::table('prices__interadies')->orderBy('Day','desc')->first('Day');
+        $end_pid = date("Y-m-d", strtotime($end_pid->Day.' -1 day'));
+        $start_pid = \DB::table('prices__interadies')->orderBy('Day','asc')->first('Day');
+        $start_pid = date("Y-m-d", strtotime($start_pid->Day.' +1 day'));
+
+        $end=$end_pda;
+        $start=$start_pda;
+        if ($end_pda>$end_pid){
+            $end=$end_pid;
+        }
+
+        if ($start_pid>$start_pda){
+            $start=$start_pid;
+        }
+
+
         $tempDate = '07.07.2020';
         if($request->filled('date_example')) {
             $tempDate = $request->date_example;
@@ -79,6 +84,7 @@ class HomeController extends Controller
             ->get();
         $maxDateArray_pid = [];
 
+
         if (count($prices_interady) == 3){
             for ($i = 0; $i < 3; $i++) {
                 //$dateMax = $prices_day_ahead[$i]['Day'];
@@ -95,9 +101,11 @@ class HomeController extends Controller
                 $maxDateArray_pid[] = $hourMax;
             }
         }
+
         //Assume a hit every time, might need some counter measure to prevent null data
         return view('home',
-            ['dby'=>$prices_day_ahead[0], 'dbt'=>$prices_day_ahead[1],'dbtm'=>$prices_day_ahead[2], 'hY' => $maxDateArray,
+            [ 'end' =>$end, 'start' =>$start,
+                'dby'=>$prices_day_ahead[0], 'dbt'=>$prices_day_ahead[1],'dbtm'=>$prices_day_ahead[2], 'hY' => $maxDateArray,
                 'dby_pid'=>$prices_interady[0], 'dbt_pid'=>$prices_interady[1],'dbtm_pid'=>$prices_interady[2], 'hY_pid' => $maxDateArray_pid]);
     }
 }

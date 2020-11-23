@@ -25,6 +25,7 @@ class GraphDataController extends Controller
         $end = date("d-m-Y", strtotime($end->Day));
         $start = \DB::table('prices__day__aheads')->orderBy('Day','asc')->first('Day');
         $start = date("d-m-Y", strtotime($start->Day));
+
         return view('charts.input', compact('end', 'start'));
 
     }
