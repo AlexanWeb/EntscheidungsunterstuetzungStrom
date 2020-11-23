@@ -58,13 +58,14 @@ class HomeController extends Controller
         }
 
         $prices_day_ahead = Prices_Day_Ahead::where('Day', '>=', date('Y-m-d', strtotime('-1 days',strtotime($tempDate))))
-            ->where('Day', '<=', date('Y-m-d', strtotime('+1 days',strtotime($tempDate))))
+            ->where('Day', '<=', date('Y-m-d', strtotime('+2 days',strtotime($tempDate))))
             ->orderBy('Day')
             ->get();
         $maxDateArray = [];
 
-        if (count($prices_day_ahead) == 3){
-            for ($i = 0; $i < 3; $i++) {
+
+        if (count($prices_day_ahead) == 4){
+            for ($i = 0; $i < 4; $i++) {
                 //$dateMax = $prices_day_ahead[$i]['Day'];
                 $hourMax = array_search($prices_day_ahead[$i]['Maximum'] ,$prices_day_ahead->toArray()[$i]);
                 //$prices_day_ahead[0]['Maximum']
@@ -80,14 +81,13 @@ class HomeController extends Controller
 
 
         $prices_interady = Prices_Interady::where('Day', '>=', date('Y-m-d', strtotime('-1 days',strtotime($tempDate))))
-            ->where('Day', '<=', date('Y-m-d', strtotime('+1 days',strtotime($tempDate))))
+            ->where('Day', '<=', date('Y-m-d', strtotime('+2 days',strtotime($tempDate))))
             ->orderBy('Day')
             ->get();
         $maxDateArray_pid = [];
 
-
-        if (count($prices_interady) == 3){
-            for ($i = 0; $i < 3; $i++) {
+        if (count($prices_interady) == 4){
+            for ($i = 0; $i < 4; $i++) {
                 //$dateMax = $prices_day_ahead[$i]['Day'];
                 $hourMax = array_search($prices_interady[$i]['Maximum'] ,$prices_interady->toArray()[$i]);
                 //$prices_day_ahead[0]['Maximum']
@@ -106,7 +106,7 @@ class HomeController extends Controller
         //Assume a hit every time, might need some counter measure to prevent null data
         return view('home',
             [ 'end' =>$end, 'start' =>$start,
-                'dby'=>$prices_day_ahead[0], 'dbt'=>$prices_day_ahead[1],'dbtm'=>$prices_day_ahead[2], 'hY' => $maxDateArray,
-                'dby_pid'=>$prices_interady[0], 'dbt_pid'=>$prices_interady[1],'dbtm_pid'=>$prices_interady[2], 'hY_pid' => $maxDateArray_pid]);
+                'dby'=>$prices_day_ahead[0], 'dbt'=>$prices_day_ahead[1],'dbtm'=>$prices_day_ahead[2],'dbtum'=>$prices_day_ahead[3], 'hY' => $maxDateArray,
+                'dby_pid'=>$prices_interady[0], 'dbt_pid'=>$prices_interady[1],'dbtm_pid'=>$prices_interady[2],'dbtum_pid'=>$prices_interady[3], 'hY_pid' => $maxDateArray_pid]);
     }
 }
