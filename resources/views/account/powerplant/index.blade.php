@@ -44,7 +44,7 @@
 
                         <div class="form-group {{$errors->has('test1') ? 'has-error':''}}">
                             <label for="test1" class="control-label">Test 1</label>
-                            <input type="text" name="test1" id="test1" class="form-control" placeholder="Test 1" readonly>
+                            <input type="text" name="test1" id="test1" class="form-control" placeholder="Test 1" >
                             @error('test1')
                             <small class = "form-text text-danger">{{$errors->first('test1')}}</small>
                             @enderror
@@ -52,7 +52,7 @@
 
                         <div class="form-group {{$errors->has('test2') ? 'has-error':''}}">
                             <label for="test2" class="control-label">Test 2</label>
-                            <input type="text" name="test2" id="test2" class="form-control" placeholder="Test 2" readonly>
+                            <input type="text" name="test2" id="test2" class="form-control" placeholder="Test 2" >
                             @error('test2')
                             <small class = "form-text text-danger">{{$errors->first('test2')}}</small>
                             @enderror
@@ -60,7 +60,7 @@
 
                         <div class="form-group {{$errors->has('test3') ? 'has-error':''}}">
                             <label for="marginal_cost" class="control-label">Test 3</label>
-                            <input type="text" name="test3" id="test3" class="form-control" placeholder="Test 3" readonly>
+                            <input type="text" name="test3" id="test3" class="form-control" placeholder="Test 3" >
                             @error('test3')
                             <small class = "form-text text-danger">{{$errors->first('test3')}}</small>
                             @enderror
@@ -68,7 +68,7 @@
 
                         <div class="form-group {{$errors->has('marginal_cost') ? 'has-error':''}}">
                             <label for="test4" class="control-label">Test 4</label>
-                            <input type="text" name="test4" id="test4" class="form-control" placeholder="Test 4" readonly>
+                            <input type="text" name="test4" id="test4" class="form-control" placeholder="Test 4" >
                             @error('test4')
                             <small class = "form-text text-danger">{{$errors->first('test4')}}</small>
                             @enderror
