@@ -32,6 +32,18 @@
                                 Market values
                             </label>
                         </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input class="form-check-input" type="radio" name="data" id="type_sale1_prediction" value="day_Ahead_prediction">
+                            <label class="form-check-label" for="market_values">
+                                Price of Day-Ahead Auction (Prediction)
+                            </label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input class="form-check-input" type="radio" name="data" id="type_sale2_prediction" value="intraday_prediction">
+                            <label class="form-check-label" for="market_values">
+                                Price of Intraday Auction (Prediction)
+                            </label>
+                        </div>
                     </div>
                     <div class="card">
                         <div class="card-header">
