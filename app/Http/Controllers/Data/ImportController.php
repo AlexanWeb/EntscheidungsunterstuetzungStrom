@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Data;
 use App\Models\Data\MarketValues;
 use App\Models\Data\Price\Prices_Day_Ahead;
 use App\Models\Data\Price\Prices_Interady;
+use App\Models\Data\Price\Pricesdayahdead__prediction;
+use App\Models\Data\Price\Pricesinteradays__prediction;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -69,6 +71,18 @@ class ImportController extends Controller
             $data = array_slice($data, 1);
 
             (new MarketValues())->uploadToTD($data);
+        }
+        elseif ($request->data == "day_Ahead_predictio")
+        {
+            $data = array_map('str_getcsv', file($file));
+            $data = array_slice($data, 2); // return die Daten ohne erste zwei Zeille
+            (new Pricesdayahdead__prediction())->uploadToTD($data);
+        }
+        elseif ($request->data == "intraday_prediction")
+        {
+            $data = array_map('str_getcsv', file($file));
+            $data = array_slice($data, 2); // return die Daten ohne erste zwei Zeille
+            (new Pricesinteradays__prediction())->uploadToTD($data);
         }
 
 
