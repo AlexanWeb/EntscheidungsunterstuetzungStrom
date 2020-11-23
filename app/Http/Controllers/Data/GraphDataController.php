@@ -36,7 +36,33 @@ class GraphDataController extends Controller
      */
     public function indexBoxplot ()
     {
-        return view('charts.inputBoxPlot');
+
+        $end_pda = \DB::table('prices__day__aheads')->orderBy('Day','desc')->first('Day');
+        $end_pda = date("Y-m-d", strtotime($end_pda->Day));
+        $start_pda = \DB::table('prices__day__aheads')->orderBy('Day','asc')->first('Day');
+        $start_pda = date("Y-m-d", strtotime($start_pda->Day));
+
+        $end_pid = \DB::table('prices__interadies')->orderBy('Day','desc')->first('Day');
+        $end_pid = date("Y-m-d", strtotime($end_pid->Day));
+        $start_pid = \DB::table('prices__interadies')->orderBy('Day','asc')->first('Day');
+        $start_pid = date("Y-m-d", strtotime($start_pid->Day));
+
+        $end=$end_pda;
+        $start=$start_pda;
+
+        if ($end_pda>$end_pid){
+            $end=$end_pid;
+        }
+
+        if ($start_pid>$start_pda){
+            $start=$start_pid;
+        }
+
+        $end= date("m-Y", strtotime($end));
+        $start=date("m-Y", strtotime($start));
+
+
+        return view('charts.inputBoxPlot', compact('end', 'start'));
 
     }
 

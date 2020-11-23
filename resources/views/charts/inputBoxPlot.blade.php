@@ -102,12 +102,16 @@
 <script type="text/javascript">
     feather.replace();
 
+
+    var end = {!! json_encode($end) !!};
+    var start = {!! json_encode($start) !!};
+
     $('.date').datepicker( {
         format: "mm-yyyy",
         viewMode: "months",
         minViewMode: "months",
-        startDate: '01-2020',
-        endDate:'07-2020'
+        startDate: start,
+        endDate: end
     });
 
 </script>

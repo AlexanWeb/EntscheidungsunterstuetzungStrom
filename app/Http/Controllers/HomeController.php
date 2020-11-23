@@ -42,6 +42,7 @@ class HomeController extends Controller
 
         $end=$end_pda;
         $start=$start_pda;
+
         if ($end_pda>$end_pid){
             $end=$end_pid;
         }
