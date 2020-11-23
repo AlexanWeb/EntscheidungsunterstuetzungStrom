@@ -37,7 +37,11 @@ class PowerPlantController extends Controller
         $rules = [
             'power_plant_name' => 'required|max:225', // string maximal 225
             'type_powerplant' => 'required|max:225', // string maximal 225
-            'marginal_cost' => 'required|numeric', // nur Nummer eingeben
+            'marginal_cost' => 'numeric', // nur Nummer eingeben
+            'test1' => 'numeric', // nur Nummer eingeben
+            'test2' => 'numeric', // nur Nummer eingeben
+            'test3' => 'numeric', // nur Nummer eingeben
+            'test4' => 'numeric', // nur Nummer eingeben
         ];
         $validator = Validator::make($request->all(), $rules);
 
