@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    <h4>Sorry No Data now in System, Please wait until the Admin have to load the Data</h4>
+                    <h4>There is currently not data available. Please try again later.</h4>
                 </div>
             </div>
         </div>
