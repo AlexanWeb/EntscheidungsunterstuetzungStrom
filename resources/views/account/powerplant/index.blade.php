@@ -42,35 +42,37 @@
                             @enderror
                         </div>
 
-                        <div class="form-group {{$errors->has('test1') ? 'has-error':''}}">
-                            <label for="test1" class="control-label">Test 1</label>
-                            <input type="text" name="test1" id="test1" class="form-control" placeholder="Test 1" >
-                            @error('test1')
-                            <small class = "form-text text-danger">{{$errors->first('test1')}}</small>
+                        Or Levelized cost of electricity
+                        <div class="form-group {{$errors->has('investment') ? 'has-error':''}}">
+                            <label for="test1" class="control-label">Investment Cost</label>
+                            <input type="text" name="investment" id="investment" class="form-control" placeholder="Investment Cost
+                            (includes every aspect of the installation)" >
+                            @error('investment')
+                            <small class = "form-text text-danger">{{$errors->first('investment')}}</small>
                             @enderror
                         </div>
 
-                        <div class="form-group {{$errors->has('test2') ? 'has-error':''}}">
-                            <label for="test2" class="control-label">Test 2</label>
-                            <input type="text" name="test2" id="test2" class="form-control" placeholder="Test 2" >
-                            @error('test2')
-                            <small class = "form-text text-danger">{{$errors->first('test2')}}</small>
+                        <div class="form-group {{$errors->has('interest') ? 'has-error':''}}">
+                            <label for="interest" class="control-label">Interest</label>
+                            <input type="text" name="interest" id="interest" class="form-control" placeholder="Interest for capital" >
+                            @error('interest')
+                            <small class = "form-text text-danger">{{$errors->first('interest')}}</small>
                             @enderror
                         </div>
 
-                        <div class="form-group {{$errors->has('test3') ? 'has-error':''}}">
-                            <label for="marginal_cost" class="control-label">Test 3</label>
-                            <input type="text" name="test3" id="test3" class="form-control" placeholder="Test 3" >
-                            @error('test3')
-                            <small class = "form-text text-danger">{{$errors->first('test3')}}</small>
+                        <div class="form-group {{$errors->has('returns') ? 'has-error':''}}">
+                            <label for="marginal_cost" class="control-label">Returns</label>
+                            <input type="text" name="returns" id="returns" class="form-control" placeholder="Anual returns separted by ';'one value for each year">
+                            @error('returns')
+                            <small class = "form-text text-danger">{{$errors->first('returns')}}</small>
                             @enderror
                         </div>
 
-                        <div class="form-group {{$errors->has('marginal_cost') ? 'has-error':''}}">
-                            <label for="test4" class="control-label">Test 4</label>
-                            <input type="text" name="test4" id="test4" class="form-control" placeholder="Test 4" >
-                            @error('test4')
-                            <small class = "form-text text-danger">{{$errors->first('test4')}}</small>
+                        <div class="form-group {{$errors->has('cost') ? 'has-error':''}}">
+                            <label for="cost" class="control-label">Cost</label>
+                            <input type="text" name="cost" id="cost" class="form-control" placeholder="Anual cost seperated by ';' one value for each year" >
+                            @error('cost')
+                            <small class = "form-text text-danger">{{$errors->first('cost')}}</small>
                             @enderror
                         </div>
 

@@ -37,18 +37,45 @@ class PowerPlantController extends Controller
         $rules = [
             'power_plant_name' => 'required|max:225', // string maximal 225
             'type_powerplant' => 'required|max:225', // string maximal 225
-            'marginal_cost' => 'required|numeric', // nur Nummer eingeben
+            'marginal_cost' => 'required_without_all:cost,returns,interest,investment|numeric|nullable', // nur Nummer eingeben
+            'investment' => 'required_without:marginal_cost|numeric|nullable',
+            'interest' => 'required_without:marginal_cost|numeric|nullable',
+            'cost' => 'required_without:marginal_cost|regex:/^[0-9]+(\;[0-9]+)*$/|nullable',
+            'returns' => 'required_without:marginal_cost|regex:/^[0-9]+(\;[0-9]+)*$/|nullable',
         ];
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator -> fails()){
             return redirect()->back()->withErrors($validator)->withInput($request->all());;
         }
+        $marginal_cost_calc = 0;
+
+        if (empty($request['investment'])) { // Can expect all do be filled thus only testing one
+            $marginal_cost_calc = $request['marginal_cost'];
+            $marginal_cost_calc = 99;
+        } else {
+            $returns = explode(';', $request['returns']);
+            $cost = explode(';', $request['cost']);
+            if(count($returns) == count($cost)){
+                $fitted_returns = 0;
+                $fitted_costs = 0;
+                for ($i = 1; $i <= count($returns); $i++) {
+
+                    $fitted_returns += $returns[$i-1]/pow((1+($request['interest']/100)), $i);
+                    $fitted_costs += $cost[$i-1]/pow((1+($request['interest']/100)),$i);
+
+                    $marginal_cost_calc =($fitted_costs + $request['investment'])/ $fitted_returns;
+                    $marginal_cost_calc = round($marginal_cost_calc, 3);
+                }
+            } else {
+                return redirect()->route('powerplant.index')->with('error', 'Anual values must be the same number for cost and returns');
+            }
+        }
 
         PowerPlant::create([
             'name' => $request['power_plant_name'],
             'type' => $request['type_powerplant'],
-            'marginal_cost' => $request['marginal_cost'],
+            'marginal_cost' => $marginal_cost_calc,
             'user_id' => $request->user()->id,
         ]);
 
