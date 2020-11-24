@@ -52,6 +52,51 @@
                             @enderror
                         </div>
 
+
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="no_marginal_cost" value="no">
+                            <label class="form-check-label" for="no_marginal_cost" >
+                                <h5> No Marginal cost, Levelized cost of electricity    </h5>
+                            </label>
+                        </div>
+
+                        <br>
+                        <fieldset id="no_of_staff" disabled>
+                            <div class="form-group {{$errors->has('investment') ? 'has-error':''}}">
+                                <label for="test1" class="control-label">Investment Cost</label>
+                                <input type="text" name="investment" id="investment" class="form-control" placeholder="Investment Cost
+                                (includes every aspect of the installation)" >
+                                @error('investment')
+                                <small class = "form-text text-danger">{{$errors->first('investment')}}</small>
+                                @enderror
+                            </div>
+
+                            <div class="form-group {{$errors->has('interest') ? 'has-error':''}}">
+                                <label for="interest" class="control-label">Interest</label>
+                                <input type="text" name="interest" id="interest" class="form-control" placeholder="Interest for capital" >
+                                @error('interest')
+                                <small class = "form-text text-danger">{{$errors->first('interest')}}</small>
+                                @enderror
+                            </div>
+
+                            <div class="form-group {{$errors->has('returns') ? 'has-error':''}}">
+                                <label for="marginal_cost" class="control-label">Returns</label>
+                                <input type="text" name="returns" id="returns" class="form-control" placeholder="Annual returns separted by ';'one value for each year">
+                                @error('returns')
+                                <small class = "form-text text-danger">{{$errors->first('returns')}}</small>
+                                @enderror
+                            </div>
+
+                            <div class="form-group {{$errors->has('cost') ? 'has-error':''}}">
+                                <label for="cost" class="control-label">Cost</label>
+                                <input type="text" name="cost" id="cost" class="form-control" placeholder="Annual cost seperated by ';' one value for each year" >
+                                @error('cost')
+                                <small class = "form-text text-danger">{{$errors->first('cost')}}</small>
+                                @enderror
+                            </div>
+                        </fieldset>
+
                         <button type="submit"class="btn btn-primary">Update</button>
 
                     </div>
@@ -62,4 +107,24 @@
 
         </div>
     </div>
+@endsection
+@section('scripts')
+
+    <script >
+        $(document).ready(function(){
+            $('#no_marginal_cost').click(function(){
+                var rBtnVal = $(this).val();
+                if(rBtnVal == "yes"){
+                    $("#no_of_staff").attr("disabled", true);
+                    document.getElementById("no_marginal_cost").value = "no";
+                    $("#marginal_cost").attr("disabled", false);
+                }
+                else{
+                    document.getElementById("no_marginal_cost").value = "yes";
+                    $("#no_of_staff").attr("disabled", false);
+                    $("#marginal_cost").attr("disabled", true);
+                }
+            });
+        });
+    </script>
 @endsection
