@@ -72,7 +72,7 @@ class ImportController extends Controller
 
             (new MarketValues())->uploadToTD($data);
         }
-        elseif ($request->data == "day_Ahead_predictio")
+        elseif ($request->data == "day_Ahead_prediction")
         {
             $data = array_map('str_getcsv', file($file));
             $data = array_slice($data, 2); // return die Daten ohne erste zwei Zeille
