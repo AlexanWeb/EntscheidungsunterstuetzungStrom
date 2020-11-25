@@ -164,33 +164,6 @@ class GraphDataController extends Controller
             $prices = collect($prices);
         }
 
-//        // user prediction data if give today
-//        if($request->today){
-//            $today = date("Y-m-d", strtotime($request->today));
-//            // check if the table fpr prediction not empty
-//            $test_pid_pre = \DB::table('pricesinteradays__predictions')->first();
-//
-//            if($test_pid_pre){
-//                $prices_pred = Pricesinteradays__prediction::whereBetween('Day', [$today, $end_date])->orderBy('Day','desc')->get();
-//            }else{
-//                $prices_pred = Prices_Interady::whereBetween('Day', [$today, $end_date])->orderBy('Day','desc')->get();
-//            }
-//
-//            // today not from past data, it is from prediction data
-//            $last_day_Past_data = date("Y-m-d", strtotime($today.' -1 day'));
-//            $prices_past = Prices_Interady::whereBetween('Day', [$start_date, $last_day_Past_data])->orderBy('Day','desc')->get();
-//
-//            $prices = collect($prices_pred->merge($prices_past));
-//
-//         // not use prediction data if didn't give today
-//        }else{
-//            $today = date("Y-m-d", strtotime($request->today));
-//
-//            $prices = Prices_Interady::whereBetween('Day', [$start_date, $end_date])->orderBy('Day','desc')->get();
-//            $prices = collect($prices);
-//
-//        }
-
         $prices->transform(function ($temp) {
             $data = [];
             for ($i = 1; $i < 25; $i++){
@@ -283,31 +256,6 @@ class GraphDataController extends Controller
                 }
             }
 
-
-            /*$data[$temp->Day . ':Hour 01'] = round($temp->Hour_1 / 1000, 4);
-            $data[$temp->Day . ':Hour 02'] = round($temp->Hour_2 / 1000, 4);
-            $data[$temp->Day . ':Hour 03'] = round($temp->Hour_3A / 1000, 4);
-            $data[$temp->Day . ':Hour 04'] = round($temp->Hour_4 / 1000, 4);
-            $data[$temp->Day . ':Hour 05'] = round($temp->Hour_5 / 1000, 4);
-            $data[$temp->Day . ':Hour 06'] = round($temp->Hour_6 / 1000, 4);
-            $data[$temp->Day . ':Hour 07'] = round($temp->Hour_7 / 1000, 4);
-            $data[$temp->Day . ':Hour 08'] = round($temp->Hour_8 / 1000, 4);
-            $data[$temp->Day . ':Hour 09'] = round($temp->Hour_9 / 1000, 4);
-            $data[$temp->Day . ':Hour 10'] = round($temp->Hour_10 / 1000, 4);
-            $data[$temp->Day . ':Hour 11'] = round($temp->Hour_11 / 1000, 4);
-            $data[$temp->Day . ':Hour 12'] = round($temp->Hour_12 / 1000, 4);
-            $data[$temp->Day . ':Hour 13'] = round($temp->Hour_13 / 1000, 4);
-            $data[$temp->Day . ':Hour 14'] = round($temp->Hour_14 / 1000, 4);
-            $data[$temp->Day . ':Hour 15'] = round($temp->Hour_15 / 1000, 4);
-            $data[$temp->Day . ':Hour 16'] = round($temp->Hour_16 / 1000, 4);
-            $data[$temp->Day . ':Hour 17'] = round($temp->Hour_17 / 1000, 4);
-            $data[$temp->Day . ':Hour 18'] = round($temp->Hour_18 / 1000, 4);
-            $data[$temp->Day . ':Hour 19'] = round($temp->Hour_19 / 1000, 4);
-            $data[$temp->Day . ':Hour 20'] = round($temp->Hour_20 / 1000, 4);
-            $data[$temp->Day . ':Hour 21'] = round($temp->Hour_21 / 1000, 4);
-            $data[$temp->Day . ':Hour 22'] = round($temp->Hour_22 / 1000, 4);
-            $data[$temp->Day . ':Hour 23'] = round($temp->Hour_23 / 1000, 4);
-            $data[$temp->Day . ':Hour 24'] = round($temp->Hour_24 / 1000, 4);*/
             return $data;
         });
 

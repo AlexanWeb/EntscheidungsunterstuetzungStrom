@@ -6,6 +6,8 @@ use App\Models\Data\Price\Prices_Day_Ahead;
 use App\Models\Data\Price\Prices_Interady;
 
 
+use App\Models\Data\Price\Pricesdayahdead__prediction;
+use App\Models\Data\Price\Pricesinteradays__prediction;
 use Illuminate\Http\Request;
 
 
@@ -32,8 +34,8 @@ class HomeController extends Controller
 
         $test_pda = \DB::table('prices__day__aheads')->first();
         $test_pid = \DB::table('prices__interadies')->first();
-        // dd(count($test_pda->isEmpty()));
-        // dd((count($test_pda) > 0 && $test_pid->isEmpty()));
+
+
         if(!$test_pid || !$test_pda){
 
             return view('dashboard');
@@ -45,6 +47,9 @@ class HomeController extends Controller
             $start_pda = date("Y-m-d", strtotime($start_pda->Day));
 
             $end_pid = \DB::table('prices__interadies')->orderBy('Day','desc')->first('Day');
+
+            // the last day in old data in preices interadays
+            $end_pid_table = $end_pid->Day;
             $end_pid = date("Y-m-d", strtotime($end_pid->Day.' -2 day'));
             $start_pid = \DB::table('prices__interadies')->orderBy('Day','asc')->first('Day');
             $start_pid = date("Y-m-d", strtotime($start_pid->Day.' +1 day'));
@@ -60,16 +65,58 @@ class HomeController extends Controller
                 $start=$start_pid;
             }
 
+            // check if we have predition Data
+            $test_pid = \DB::table('pricesinteradays__predictions')->first();
+            $test_pda = \DB::table('pricesdayahdead__predictions')->first();
 
-            $tempDate = '01.05.2020';
+            if ($test_pid && $test_pda){
+
+                // last day of pricesinterdays predictions
+                $end_pid_pred = \DB::table('pricesinteradays__predictions')->orderBy('Day','desc')->first('Day');
+                $end_pid_pred = date("Y-m-d", strtotime($end_pid_pred->Day));
+
+                // last day of pricesdayahdead predictions
+                $end_pda_pred = \DB::table('pricesdayahdead__predictions')->orderBy('Day','desc')->first('Day');
+                $end_pda_pred = date("Y-m-d", strtotime($end_pda_pred->Day));
+
+                if ($end_pda_pred > $end){
+                    $end = $end_pda_pred;
+                    if ($end_pid_pred < $end_pda_pred){
+                        $end = $end_pid_pred;
+                        $end = date("Y-m-d", strtotime($end.' -2 day'));
+                    }
+                }
+            }
+            $tempDate = '04.05.2020';
             if($request->filled('date_example')) {
                 $tempDate = $request->date_example;
             }
 
-            $prices_day_ahead = Prices_Day_Ahead::where('Day', '>=', date('Y-m-d', strtotime('-1 days',strtotime($tempDate))))
-                ->where('Day', '<=', date('Y-m-d', strtotime('+2 days',strtotime($tempDate))))
-                ->orderBy('Day')
-                ->get();
+
+
+            // if the data are past data
+            if(date('Y-m-d', strtotime('+2 days',strtotime($tempDate))) <= $end_pda){
+                $prices_day_ahead = Prices_Day_Ahead::where('Day', '>=', date('Y-m-d', strtotime('-1 days',strtotime($tempDate))))
+                    ->where('Day', '<=', date('Y-m-d', strtotime('+2 days',strtotime($tempDate))))
+                    ->orderBy('Day')
+                    ->get();
+
+
+            }
+
+            // all data are predaction data
+            elseif (date('Y-m-d', strtotime('-1 days',strtotime($tempDate))) > $end_pda){
+
+                $prices_day_ahead = Pricesdayahdead__prediction::where('Day', '>=', date('Y-m-d', strtotime('-1 days',strtotime($tempDate))))
+                    ->where('Day', '<=', date('Y-m-d', strtotime('+2 days',strtotime($tempDate))))
+                    ->orderBy('Day')
+                    ->get();
+            } else
+            {
+                return view('dashboard');
+            }
+
+
             $maxDateArray = [];
 
 
@@ -89,10 +136,32 @@ class HomeController extends Controller
             }
 
 
-            $prices_interady = Prices_Interady::where('Day', '>=', date('Y-m-d', strtotime('-1 days',strtotime($tempDate))))
-                ->where('Day', '<=', date('Y-m-d', strtotime('+2 days',strtotime($tempDate))))
-                ->orderBy('Day')
-                ->get();
+
+
+            // if the data are past data
+            if(date('Y-m-d', strtotime('+2 days',strtotime($tempDate))) <= $end_pid_table){
+                $prices_interady = Prices_Interady::where('Day', '>=', date('Y-m-d', strtotime('-1 days',strtotime($tempDate))))
+                    ->where('Day', '<=', date('Y-m-d', strtotime('+2 days',strtotime($tempDate))))
+                    ->orderBy('Day')
+                    ->get();
+
+            }
+
+            // all data are predaction data
+            elseif (date('Y-m-d', strtotime('-1 days',strtotime($tempDate))) > $end_pid_table){
+
+                $prices_interady = Pricesinteradays__prediction::where('Day', '>=', date('Y-m-d', strtotime('-1 days',strtotime($tempDate))))
+                    ->where('Day', '<=', date('Y-m-d', strtotime('+2 days',strtotime($tempDate))))
+                    ->orderBy('Day')
+                    ->get();
+
+            } else
+            {
+                return view('dashboard');
+            }
+
+
+
             $maxDateArray_pid = [];
 
 
@@ -108,7 +177,6 @@ class HomeController extends Controller
                         // $hourMax = date('H:i', 3600 * $hourMax);
                         $hourMax = $hourMax.'_'.$QuartarMax;
                     }
-                    //$maxDateArray[] = $dateMax;
                     $maxDateArray_pid[] = $hourMax;
                 }
             }
