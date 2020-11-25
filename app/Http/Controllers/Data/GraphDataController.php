@@ -137,7 +137,9 @@ class GraphDataController extends Controller
 
         $end_pid = \DB::table('prices__interadies')->orderBy('Day','desc')->first('Day')->Day;
 
-        if($end_date > $end_pid){
+        // prediction tabelle not empty
+        $test_pid = \DB::table('pricesinteradays__predictions')->first();
+        if($end_date > $end_pid && $test_pid){
 
             $end_pid_pred = \DB::table('pricesinteradays__predictions')->orderBy('Day','desc')->first('Day');
             $end_pid_pred = date("Y-m-d", strtotime($end_pid_pred->Day));
@@ -235,18 +237,32 @@ class GraphDataController extends Controller
         $start_date = date("Y-m-d", strtotime($request->start_day));
         $end_date = date("Y-m-d", strtotime($request->end_day));
 
+        // get marketvalues from start day to end day
         $marketValues = $this->getMarketValues($start_date, $end_date);
 
         $end_pda = \DB::table('prices__day__aheads')->orderBy('Day','desc')->first('Day')->Day;
 
-        if($end_date > $end_pda){
+
+        // prediction tabelle not empty
+        $test_pda = \DB::table('pricesdayahdead__predictions')->first();
+        if($end_date > $end_pda && $test_pda){
+
             $prices_past = Prices_Day_Ahead::whereBetween('Day', [$start_date, $end_pda])->orderBy('Day','desc')->get();
+
+            $end_pda_pred = \DB::table('pricesdayahdead__predictions')->orderBy('Day','desc')->first('Day');
+            $end_pda_pred = date("Y-m-d", strtotime($end_pda_pred->Day));
+
+
+            // end data not in DB, gelt the end data like the last day in Prediction data
+            if($end_date > $end_pda_pred){
+                $end_date = $end_pda_pred;
+            }
             $start_pred = date("Y-m-d", strtotime($end_pda.' +1 day'));
             $prices_pred = Pricesdayahdead__prediction::whereBetween('Day', [$start_pred, $end_date])->orderBy('Day','desc')->get();
             $prices = collect($prices_pred->merge($prices_past));
         }else{
-            $start_pred= null;
 
+            $start_pred= null;
             $prices = Prices_Day_Ahead::whereBetween('Day', [$start_date, $end_date])->orderBy('Day','desc')->get();
             $prices = collect($prices);
         }
