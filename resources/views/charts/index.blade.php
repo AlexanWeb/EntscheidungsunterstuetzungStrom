@@ -151,7 +151,7 @@
 
     var start_date =  new Date("{!! $start_date !!}") ;
     var end_date =  new Date("{!! $end_date !!}") ;
-    var today =  new Date("{!! $today !!}");
+    var today =  new Date("{!! $start_pred !!}");
 
     var start_month = monthNames[start_date.getMonth()]; // month of start day
 
