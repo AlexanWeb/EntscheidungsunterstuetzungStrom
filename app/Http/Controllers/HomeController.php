@@ -45,7 +45,7 @@ class HomeController extends Controller
             $start_pda = date("Y-m-d", strtotime($start_pda->Day));
 
             $end_pid = \DB::table('prices__interadies')->orderBy('Day','desc')->first('Day');
-            $end_pid = date("Y-m-d", strtotime($end_pid->Day.' -1 day'));
+            $end_pid = date("Y-m-d", strtotime($end_pid->Day.' -2 day'));
             $start_pid = \DB::table('prices__interadies')->orderBy('Day','asc')->first('Day');
             $start_pid = date("Y-m-d", strtotime($start_pid->Day.' +1 day'));
 

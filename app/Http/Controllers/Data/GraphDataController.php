@@ -25,12 +25,15 @@ class GraphDataController extends Controller
     {
 
         $test_pda = \DB::table('prices__day__aheads')->first();
-        // dd(count($test_pda->isEmpty()));
-        // dd((count($test_pda) > 0 && $test_pid->isEmpty()));
+        $test_pid = \DB::table('prices__interadies')->first();
         if(!$test_pda) {
 
             return view('dashboard');
         } else{
+            $pid_data = '';
+            if(!$test_pid){
+                $pid_data = 'disabled';
+            }
             $end = \DB::table('prices__day__aheads')->orderBy('Day','desc')->first('Day');
             $end = date("d-m-Y", strtotime($end->Day));
 
@@ -66,7 +69,7 @@ class GraphDataController extends Controller
             }
 
 
-            return view('charts.input', compact('end', 'start', 'end_inter','start_inter'));
+            return view('charts.input', compact('end', 'start', 'end_inter','start_inter', 'pid_data'));
         }
 
 

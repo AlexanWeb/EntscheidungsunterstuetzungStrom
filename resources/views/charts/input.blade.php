@@ -52,7 +52,7 @@
                                                 </label>
                                             </div>
                                             <div class="custom-control custom-radio custom-control-inline">
-                                                <input class="form-check-input" type="radio" name="type_sale" id="type_sale2" value="intraday"  onclick="getValue()">
+                                                <input class="form-check-input" type="radio" name="type_sale" id="type_sale2" value="intraday" onclick="getValue()" {{$pid_data}}>
                                                 <label class="form-check-label" for="type_sale2">
                                                     Intraday Auction
                                                 </label>
