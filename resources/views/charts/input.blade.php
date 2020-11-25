@@ -46,13 +46,13 @@
                                         </div>
                                         <div class="card-body {{$errors->has('type_sale') ? 'has-error':''}}">
                                             <div class="custom-control custom-radio custom-control-inline">
-                                                <input class="form-check-input" type="radio" name="type_sale" id="type_sale1" value="day_Ahead" checked>
+                                                <input class="form-check-input" type="radio" name="type_sale" id="type_sale1" value="day_Ahead" onclick="getValue()" checked>
                                                 <label class="form-check-label" for="type_sale1">
                                                     Day-Ahead Auction
                                                 </label>
                                             </div>
                                             <div class="custom-control custom-radio custom-control-inline">
-                                                <input class="form-check-input" type="radio" name="type_sale" id="type_sale2" value="intraday">
+                                                <input class="form-check-input" type="radio" name="type_sale" id="type_sale2" value="intraday"  onclick="getValue()">
                                                 <label class="form-check-label" for="type_sale2">
                                                     Intraday Auction
                                                 </label>
@@ -145,8 +145,23 @@
 
     feather.replace();
 
-    var end = {!! json_encode($end) !!};
-    var start = {!! json_encode($start) !!};
+    let end = {!! json_encode($end) !!};
+    let start = {!! json_encode($start) !!};
+
+    var radios = document.getElementsByName("type_sale");
+
+    function getValue() {
+        var value = document.querySelector('input[name="type_sale"]:checked').value;
+        if(value ==="intraday"){
+            end = {!! json_encode($end_inter) !!};
+            start = {!! json_encode($start_inter) !!};
+
+        } else{
+            end = {!! json_encode($end) !!};
+            start = {!! json_encode($start) !!};
+
+        }
+    }
 
     $('.date').datepicker({
         format: 'dd-mm-yyyy',

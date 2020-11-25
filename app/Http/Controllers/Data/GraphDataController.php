@@ -44,7 +44,29 @@ class GraphDataController extends Controller
             $start = \DB::table('prices__day__aheads')->orderBy('Day','asc')->first('Day');
             $start = date("d-m-Y", strtotime($start->Day));
 
-            return view('charts.input', compact('end', 'start'));
+            ######## get start and end day for interadays ##########
+            $test_pid = \DB::table('prices__interadies')->first();
+
+            $end_inter = null;
+            $start_inter = null;
+            if ($test_pid){
+                $end_inter = \DB::table('prices__interadies')->orderBy('Day','desc')->first('Day');
+                $end_inter = date("d-m-Y", strtotime($end_inter->Day));
+
+                $start_inter = \DB::table('prices__interadies')->orderBy('Day','asc')->first('Day');
+                $start_inter = date("d-m-Y", strtotime($start_inter->Day));
+            }
+
+
+            $test_pid_pre = \DB::table('pricesinteradays__predictions')->first();
+
+            if($test_pid_pre){
+                $end_inter = \DB::table('pricesinteradays__predictions')->orderBy('Day','desc')->first('Day');
+                $end_inter = date("d-m-Y", strtotime($end_inter->Day));
+            }
+
+
+            return view('charts.input', compact('end', 'start', 'end_inter','start_inter'));
         }
 
 
@@ -123,13 +145,40 @@ class GraphDataController extends Controller
 
         $start_date = date("Y-m-d", strtotime($request->start_day));
         $end_date = date("Y-m-d", strtotime($request->end_day));
-        $today = date("Y-m-d", strtotime($request->today));
 
+
+        // get marketvalues from start day to end day
         $marketValues = $this->getMarketValues($start_date, $end_date);
 
-        // $diff=date_diff($request->start_day,$request->today);
-        $prices = Prices_Interady::whereBetween('Day', [$start_date, $end_date])->get();
-        $prices = collect($prices);
+
+
+        // user prediction data if give today
+        if($request->today){
+            $today = date("Y-m-d", strtotime($request->today));
+
+            // check if the table fpr prediction not empty
+            $test_pid_pre = \DB::table('pricesinteradays__predictions')->first();
+
+            if($test_pid_pre){
+                $prices_pred = Pricesinteradays__prediction::whereBetween('Day', [$today, $end_date])->orderBy('Day','desc')->get();
+            }else{
+                $prices_pred = Prices_Interady::whereBetween('Day', [$today, $end_date])->orderBy('Day','desc')->get();
+            }
+
+            // today not from past data, it is from prediction data
+            $last_day_Past_data = date("Y-m-d", strtotime($today.' -1 day'));
+            $prices_past = Prices_Interady::whereBetween('Day', [$start_date, $last_day_Past_data])->orderBy('Day','desc')->get();
+
+            $prices = collect($prices_pred->merge($prices_past));
+
+         // not use prediction data if didn't give today
+        }else{
+            $today = date("Y-m-d", strtotime($request->today));
+
+            $prices = Prices_Interady::whereBetween('Day', [$start_date, $end_date])->orderBy('Day','desc')->get();
+            $prices = collect($prices);
+
+        }
 
         $prices->transform(function ($temp) {
             $data = [];
@@ -177,25 +226,36 @@ class GraphDataController extends Controller
 
         $start_date = date("Y-m-d", strtotime($request->start_day));
         $end_date = date("Y-m-d", strtotime($request->end_day));
-        $today = date("Y-m-d", strtotime($request->today));
 
 
         $marketValues = $this->getMarketValues($start_date, $end_date);
 
-        // check if the table fpr prediction not empty
-        $test_pda_pre = \DB::table('pricesdayahdead__predictions')->first();
 
-        if($test_pda_pre){
-            $prices_pred = Pricesdayahdead__prediction::whereBetween('Day', [$today, $end_date])->orderBy('Day','desc')->get();
+        if($request->today){
+            $today = date("Y-m-d", strtotime($request->today));
+            // check if the table fpr prediction not empty
+            $test_pda_pre = \DB::table('pricesdayahdead__predictions')->first();
+
+            if($test_pda_pre){
+                $prices_pred = Pricesdayahdead__prediction::whereBetween('Day', [$today, $end_date])->orderBy('Day','desc')->get();
+            }else{
+                $prices_pred = Prices_Day_Ahead::whereBetween('Day', [$today, $end_date])->orderBy('Day','desc')->get();
+            }
+
+            // today not from past data, it is from prediction data
+            $last_day_Past_data = date("Y-m-d", strtotime($today.' -1 day'));
+            $prices_past = Prices_Day_Ahead::whereBetween('Day', [$start_date, $last_day_Past_data])->orderBy('Day','desc')->get();
+
+            $prices = collect($prices_pred->merge($prices_past));
         }else{
-            $prices_pred = Prices_Day_Ahead::whereBetween('Day', [$today, $end_date])->orderBy('Day','desc')->get();
+
+            $today = date("Y-m-d", strtotime($request->today));
+
+            $prices = Prices_Day_Ahead::whereBetween('Day', [$start_date, $end_date])->orderBy('Day','desc')->get();
+            $prices = collect($prices);
+
         }
 
-        // today not from past data, it is from prediction data
-        $last_day_Past_data = date("Y-m-d", strtotime($today.' -1 day'));
-        $prices_past = Prices_Day_Ahead::whereBetween('Day', [$start_date, $last_day_Past_data])->orderBy('Day','desc')->get();
-
-        $prices = collect($prices_pred->merge($prices_past));
 
 
         $prices->transform(function ($temp) {
