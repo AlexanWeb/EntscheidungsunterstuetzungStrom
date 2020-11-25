@@ -17,31 +17,35 @@
                         <div class="custom-control custom-radio custom-control-inline">
                             <input class="form-check-input" type="radio" name="data" id="type_sale1" value="day_Ahead" checked>
                             <label class="form-check-label" for="type_sale1">
-                                Price of Day-Ahead Auction
+                                <h5>Price of Day-Ahead Auction</h5>
                             </label>
                         </div>
+                        <br><br>
                         <div class="custom-control custom-radio custom-control-inline">
                             <input class="form-check-input" type="radio" name="data" id="type_sale2" value="intraday">
                             <label class="form-check-label" for="type_sale2">
-                                Price of Intraday Auction
+                                <h5>Price of Intraday Auction</h5>
                             </label>
                         </div>
+                        <br><br>
                         <div class="custom-control custom-radio custom-control-inline">
                             <input class="form-check-input" type="radio" name="data" id="market_values" value="market_values">
                             <label class="form-check-label" for="market_values">
-                                Market values
+                                <h5>Market values</h5>
                             </label>
                         </div>
+                        <br><br>
                         <div class="custom-control custom-radio custom-control-inline">
                             <input class="form-check-input" type="radio" name="data" id="type_sale1_prediction" value="day_Ahead_prediction">
                             <label class="form-check-label" for="market_values">
-                                Price of Day-Ahead Auction (Prediction)
+                                <h5>Price of Day-Ahead Auction (Prediction)</h5>
                             </label>
                         </div>
+                        <br><br>
                         <div class="custom-control custom-radio custom-control-inline">
                             <input class="form-check-input" type="radio" name="data" id="type_sale2_prediction" value="intraday_prediction">
                             <label class="form-check-label" for="market_values">
-                                Price of Intraday Auction (Prediction)
+                                <h5>Price of Intraday Auction (Prediction)</h5>
                             </label>
                         </div>
                     </div>

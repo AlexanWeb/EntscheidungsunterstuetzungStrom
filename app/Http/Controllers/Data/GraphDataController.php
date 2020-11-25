@@ -40,36 +40,19 @@ class GraphDataController extends Controller
             $test_pda_pre = \DB::table('pricesdayahdead__predictions')->first();
 
             if($test_pda_pre){
-                $end = \DB::table('pricesdayahdead__predictions')->orderBy('Day','desc')->first('Day');
-                $end = date("d-m-Y", strtotime($end->Day));
+                $end_pda_pre = \DB::table('pricesdayahdead__predictions')->orderBy('Day','desc')->first('Day');
+                $end_pda_pre = date("d-m-Y", strtotime($end_pda_pre->Day));
+                if($end_pda_pre > $end){
+                    $end = $end_pda_pre;
+                }
             }
 
             $start = \DB::table('prices__day__aheads')->orderBy('Day','asc')->first('Day');
             $start = date("d-m-Y", strtotime($start->Day));
 
-            ######## get start and end day for interadays ##########
-            $test_pid = \DB::table('prices__interadies')->first();
-
-            $end_inter = null;
-            $start_inter = null;
-            if ($test_pid){
-                $end_inter = \DB::table('prices__interadies')->orderBy('Day','desc')->first('Day');
-                $end_inter = date("d-m-Y", strtotime($end_inter->Day));
-
-                $start_inter = \DB::table('prices__interadies')->orderBy('Day','asc')->first('Day');
-                $start_inter = date("d-m-Y", strtotime($start_inter->Day));
-            }
 
 
-            $test_pid_pre = \DB::table('pricesinteradays__predictions')->first();
-
-            if($test_pid_pre){
-                $end_inter = \DB::table('pricesinteradays__predictions')->orderBy('Day','desc')->first('Day');
-                $end_inter = date("d-m-Y", strtotime($end_inter->Day));
-            }
-
-
-            return view('charts.input', compact('end', 'start', 'end_inter','start_inter', 'pid_data'));
+            return view('charts.input', compact('end', 'start', 'pid_data'));
         }
 
 
