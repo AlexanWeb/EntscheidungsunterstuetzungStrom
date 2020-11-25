@@ -99,21 +99,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="card" style="width: 18rem;">
-                                                        <div class="card-header">
-                                                            <h7>
-                                                                <span data-feather="calendar"></span>
-                                                                Today</h7>
-                                                        </div>
-                                                        <div class="card-body">
-                                                            <div class="form-group {{$errors->has('today') ? 'has-today':''}} ">
-                                                                <input class="date form-control" type="text" name="today" id="today">
-                                                                @error('today')
-                                                                <small class = "form-text text-danger">{{$errors->first('today')}}</small>
-                                                                @enderror
-                                                            </div>
-                                                        </div>
-                                                    </div>
+
                                             </div>
                                         </div>
                                     </div>
