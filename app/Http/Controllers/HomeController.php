@@ -101,7 +101,6 @@ class HomeController extends Controller
                     ->orderBy('Day')
                     ->get();
 
-
             }
 
             // all data are predaction data

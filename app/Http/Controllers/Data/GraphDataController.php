@@ -67,8 +67,8 @@ class GraphDataController extends Controller
 
         $test_pda = \DB::table('prices__day__aheads')->first();
         $test_pid = \DB::table('prices__interadies')->first();
-        // dd(count($test_pda->isEmpty()));
-        // dd((count($test_pda) > 0 && $test_pid->isEmpty()));
+
+
         if(!$test_pid || !$test_pda) {
 
             return view('dashboard');
@@ -89,6 +89,26 @@ class GraphDataController extends Controller
 
             if ($end_pda>$end_pid){
                 $end=$end_pid;
+            }
+
+            $test_pda_pre = \DB::table('pricesdayahdead__predictions')->first();
+
+            if($test_pda_pre){
+                $end_pda_pre = \DB::table('pricesdayahdead__predictions')->orderBy('Day','desc')->first('Day');
+                $end_pda_pre = date("Y-m-d", strtotime($end_pda_pre->Day));
+                if($end_pda_pre > $end){
+                    $end = $end_pda_pre;
+                }
+            }
+
+            $test_pid_pre = \DB::table('pricesinteradays__predictions')->first();
+
+            if($test_pid_pre){
+                $end_pid_pre = \DB::table('pricesinteradays__predictions')->orderBy('Day','desc')->first('Day');
+                $end_pid_pre = date("Y-m-d", strtotime($end_pid_pre->Day));
+                if($end_pid_pre < $end){
+                    $end = $end_pid_pre;
+                }
             }
 
             if ($start_pid>$start_pda){
@@ -339,8 +359,33 @@ class GraphDataController extends Controller
         $start = date("Y-m-d", strtotime('01-'.$request->start_month));
         $end = date("Y-m-t", strtotime('01-'.$request->end_month));
 
-        $prices = Prices_Day_Ahead::whereBetween('Day', [$start, $end])->get(['Day','Minimum', 'Maximum']);
-        $prices = collect($prices);
+        // last day in past data
+        $end_pda = \DB::table('prices__day__aheads')->orderBy('Day','desc')->first('Day')->Day;
+
+        // prediction tabelle not empty
+        $test_pda = \DB::table('pricesdayahdead__predictions')->first();
+
+        if($end > $end_pda && $test_pda){
+            $prices_past = Prices_Day_Ahead::whereBetween('Day', [$start, $end_pda])->orderBy('Day','desc')->get(['Day','Minimum', 'Maximum']);
+
+            $end_pda_pred = \DB::table('pricesdayahdead__predictions')->orderBy('Day','desc')->first('Day');
+            $end_pda_pred = date("Y-m-d", strtotime($end_pda_pred->Day));
+
+            // end data not in DB, gelt the end data like the last day in Prediction data
+            if($end > $end_pda_pred){
+                $end = $end_pda_pred;
+            }
+
+            $start_pred = date("Y-m-d", strtotime($end_pda.' +1 day'));
+            $prices_pred = Pricesdayahdead__prediction::whereBetween('Day', [$start_pred, $end])->orderBy('Day','desc')->get(['Day','Minimum', 'Maximum']);
+
+            $prices = collect($prices_pred->concat($prices_past));
+
+        }else{
+            $prices = Prices_Day_Ahead::whereBetween('Day', [$start, $end])->get(['Day','Minimum', 'Maximum']);
+            $prices = collect($prices);
+        }
+
 
         $pdaMin = [];
         $pdaMax = [];
@@ -362,15 +407,39 @@ class GraphDataController extends Controller
             $data['pda'][$dateObj->format('F')]['max'] = max($value);
         }
 
-        $pidprices = Prices_Interady::whereBetween('Day', [$start, $end])->get(['Day','Minimum', 'Maximum']);
 
-        $pidprices = collect($pidprices);
 
-        //dd($prices->toArray());
+        // last day in past data
+        $end_pid = \DB::table('prices__interadies')->orderBy('Day','desc')->first('Day')->Day;
+
+        // prediction tabelle not empty
+        $test_pid = \DB::table('pricesinteradays__predictions')->first();
+
+        if($end > $end_pid && $test_pid){
+            $prices_pid_past = Prices_Interady::whereBetween('Day', [$start, $end_pid])->orderBy('Day','desc')->get(['Day','Minimum', 'Maximum']);
+
+            $end_pid_pred = \DB::table('pricesinteradays__predictions')->orderBy('Day','desc')->first('Day');
+            $end_pid_pred = date("Y-m-d", strtotime($end_pid_pred->Day));
+
+            // end data not in DB, gelt the end data like the last day in Prediction data
+            if($end > $end_pid_pred){
+                $end = $end_pid_pred;
+            }
+
+            $start_pid_pred = date("Y-m-d", strtotime($end_pid.' +1 day'));
+            $prices_pid_pred = Pricesinteradays__prediction::whereBetween('Day', [$start_pid_pred, $end])->orderBy('Day','desc')->get(['Day','Minimum', 'Maximum']);
+
+            $prices_pid = collect($prices_pid_pred->concat($prices_pid_past));
+
+        }else{
+            $prices_pid = Prices_Interady::whereBetween('Day', [$start, $end])->get(['Day','Minimum', 'Maximum']);
+            $prices_pid = collect($prices_pid);
+        }
+
         $pidMin = [];
         $pidMax = [];
 
-        foreach($pidprices as $arr) {
+        foreach($prices_pid as $arr) {
             $pidMin[date("m",strtotime($arr->Day))][] = $arr->Minimum ;
             $pidMax[date("m",strtotime($arr->Day))][] = $arr->Maximum ;
         }

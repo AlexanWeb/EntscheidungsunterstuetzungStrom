@@ -8,13 +8,6 @@
 
     </li>
 
-    <li class="nav-item ">
-
-        <a class="nav-link {{return_if(on_page('account'), 'active')}}" href="{{route('account.index')}}">
-            <span data-feather="user"></span>
-            Account overview</a>
-
-    </li>
     <li class="nav-item">
 
         <a class="nav-link {{return_if(on_page('account/profile'), 'active')}}" href="{{route('profile.index')}}">
@@ -39,13 +32,6 @@
 
     </li>
 
-    <li class="nav-item">
-
-        <a class="nav-link {{return_if(on_page('account/tokens'), 'active')}}" href="{{route('token.index')}}">
-            <span data-feather="settings"></span>
-            API Tokens</a>
-
-    </li>
     @admin
     <li class="nav-item">
 

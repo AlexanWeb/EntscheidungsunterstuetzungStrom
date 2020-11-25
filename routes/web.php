@@ -28,7 +28,6 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['prefix' => 'account', 'middleware' =>['auth']], function () {
-    Route::get('/', 'Account\AccountController@index')->name('account.index');
 
 
     Route::get('profile', 'Account\ProfileController@index')->name('profile.index');
@@ -40,7 +39,6 @@ Route::group(['prefix' => 'account', 'middleware' =>['auth']], function () {
     Route::get('deactivate', 'Account\DeactivateController@index')->name('deactivate.index');
     Route::post('deactivate', 'Account\DeactivateController@store')->name('deactivate.store');
 
-    Route::get('tokens', 'Account\TokenController@index')->name('token.index');
 
 
 
