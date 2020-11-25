@@ -61,7 +61,7 @@ class HomeController extends Controller
             }
 
 
-            $tempDate = '07.07.2020';
+            $tempDate = '01.05.2020';
             if($request->filled('date_example')) {
                 $tempDate = $request->date_example;
             }
