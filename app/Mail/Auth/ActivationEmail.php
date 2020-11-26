@@ -30,6 +30,6 @@ class ActivationEmail extends Mailable
      */
     public function build()
     {
-        return $this->from('mail@example.com', 'Mailtrap')->subject('Things')->markdown('emails.auth.activation');
+        return $this->from('mail@example.com', 'Mailtrap')->subject('Account Activation')->markdown('emails.auth.activation');
     }
 }

@@ -1,7 +1,8 @@
 @component('mail::message')
 # Please activate your account.
 
-The body of your message.
+You received this email because it was used to register an account for {{ config('app.name') }}.
+If you did not register an account ignore this email otherwise please use the button to activate the account.
 
 @component('mail::button', ['url' => route('activation.activate', $token)])
 Activate
