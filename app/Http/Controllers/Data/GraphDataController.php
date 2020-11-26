@@ -168,6 +168,8 @@ class GraphDataController extends Controller
             if($end_date > $end_pid_pred){
                 $end_date = $end_pid_pred;
             }
+
+            // get past Data
             $prices_past = Prices_Interady::whereBetween('Day', [$start_date, $end_pid])->orderBy('Day','desc')->get();
 
             //get start day of prediction data
@@ -297,7 +299,9 @@ class GraphDataController extends Controller
 
         $values = array_values($prices);
         //return $diff;
-        return view('charts.index', compact("keys", "values",  "start_date", "end_date", "start_pred", "marketValues"));
+
+        return view('charts.index', compact("keys", "values",  "start_date", "end_date",
+            "start_pred", "marketValues"));
     }
 
 

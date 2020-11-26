@@ -9,7 +9,7 @@
                     <thead>
                         <tr>
 
-                            <th scope="col">#</th>
+                            <th scope="col" style="display:none">#</th>
 
                             <th scope="col">Name</th>
 
@@ -27,7 +27,7 @@
 
                         <tr>
 
-                            <th scope="row">{{$powerplant->id}}</th>
+                            <th scope="row" style="display:none">{{$powerplant->id}}</th>
 
                             <td>{{$powerplant->name}} </td>
 

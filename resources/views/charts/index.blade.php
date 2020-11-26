@@ -412,8 +412,6 @@
     ///////// ENDE  Creat Checkbox of Market values für Chart //////////////
 
 
-
-
     ///////// BEGGINN  vorbereitung Dataset von Kraw für Chart //////////////
     const data_power = powerplants.reduce(function (values, item){ // fügen die Dataset von KA für Array hinzu //
         values.push({data: Array(keys.length).fill(item.marginal_cost),
@@ -469,7 +467,6 @@
 
         return values;
     },data_power);
-
 
     ///////// ENDE  vorbereitung Dataset für Chart //////////////
 
@@ -544,11 +541,7 @@
         }
     }
 
-
     ///////// ENDE creat the INPUT Dataset für Chart //////////////
-
-
-
 
 
     ///////// BEGINN creat the Chart //////////////
